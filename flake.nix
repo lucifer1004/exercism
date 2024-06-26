@@ -10,7 +10,10 @@
       pkgs = import nixpkgs { system = "x86_64-linux"; };
     in
     {
-      devShells.x86_64-linux.default = pkgs.mkShell {
+      devShells.x86_64-linux.default = pkgs.mkShell.override { 
+        # # Swift (Discarded for now)
+        # inherit (pkgs.swift) stdenv; 
+      } {
         buildInputs = [
           # OcaML
           pkgs.ocaml
@@ -33,6 +36,19 @@
 
           # WASM
           pkgs.nodejs_22
+
+          # # Swift (Discarded for now)
+          # pkgs.swift
+          # pkgs.swiftPackages.Dispatch
+          # pkgs.swiftPackages.Foundation
+          # pkgs.swiftPackages.swiftpm
+          # pkgs.swiftPackages.sourcekit-lsp
+          # pkgs.swiftPackages.xcbuild
+          # pkgs.swiftPackages.XCTest
+
+          # Python
+          pkgs.python311
+          pkgs.python311Packages.pytest
         ];
 
         shellHook = ''

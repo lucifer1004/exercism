@@ -1,0 +1,37 @@
+## Registers
+
+# | Register | Usage     | Type    | Description                                      |
+# | -------- | --------- | ------- | ------------------------------------------------ |
+# | `$a0`    | input     | integer | year to check                                    |
+# | `$v0`    | output    | boolean | input is leap year (`0` = `false`, `1` = `true`) |
+# | `$t0-9`  | temporary | any     | used for temporary storage                       |
+
+.globl is_leap_year
+
+is_leap_year:
+        # if year is divisible by 400
+        li $t0, 400
+        div $a0, $t0
+        mfhi $t1
+        beq $t1, $zero, is_leap_year_true
+
+        # if year is divisible by 100
+        li $t0, 100
+        div $a0, $t0
+        mfhi $t1
+        beq $t1, $zero, is_leap_year_false
+
+        # if year is divisible by 4
+        li $t0, 4
+        div $a0, $t0
+        mfhi $t1
+        beq $t1, $zero, is_leap_year_true
+        bne $t1, $zero, is_leap_year_false
+
+is_leap_year_true:
+        li $v0, 1
+        jr $ra
+
+is_leap_year_false:
+        li $v0, 0
+        jr $ra

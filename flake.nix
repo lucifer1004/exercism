@@ -23,6 +23,9 @@
           # Clojure
           pkgs.clojure
           pkgs.leiningen
+
+          # MIPS
+          pkgs.openjdk
         ];
 
         shellHook = ''

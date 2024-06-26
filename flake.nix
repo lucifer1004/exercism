@@ -26,6 +26,10 @@
 
           # MIPS
           pkgs.openjdk
+
+          # Zig
+          pkgs.zig
+          pkgs.zls
         ];
 
         shellHook = ''

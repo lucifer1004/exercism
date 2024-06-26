@@ -30,6 +30,9 @@
           # Zig
           pkgs.zig
           pkgs.zls
+
+          # WASM
+          pkgs.nodejs_22
         ];
 
         shellHook = ''

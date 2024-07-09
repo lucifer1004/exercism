@@ -1,0 +1,23 @@
+{
+  "authors": [
+    "cousinitt"
+  ],
+  "contributors": [
+    "robertpostill",
+    "timotheosh"
+  ],
+  "files": {
+    "solution": [
+      "armstrong-numbers.rkt"
+    ],
+    "test": [
+      "armstrong-numbers-test.rkt"
+    ],
+    "example": [
+      ".meta/example.rkt"
+    ]
+  },
+  "blurb": "Determine if a number is an Armstrong number.",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Narcissistic_number"
+}

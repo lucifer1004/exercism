@@ -49,6 +49,9 @@
           # Python
           pkgs.python311
           pkgs.python311Packages.pytest
+
+          # Racket
+          pkgs.racket
         ];
 
         shellHook = ''

@@ -1,0 +1,2 @@
+test project:
+    nix develop --command sh -c "cd {{project}} && zig test test*"

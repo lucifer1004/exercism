@@ -1,0 +1,3 @@
+test project:
+    nix develop --command sh -c "cd {{project}} && npm test"
+

@@ -1,6 +1,7 @@
 {
   "name": "@exercism/wasm-exercises",
   "description": "Exercism WASM exercises workspace",
+  "type": "module",
   "private": true,
   "workspaces": [
     "hello-world",
@@ -10,13 +11,13 @@
   "devDependencies": {
     "@babel/core": "^7.28.5",
     "@exercism/babel-preset-javascript": "^0.7.0",
-    "@exercism/eslint-config-javascript": "^0.6.0",
-    "@types/jest": "^29.5.14",
-    "@types/node": "^20.19.24",
-    "babel-jest": "^29.7.0",
+    "@exercism/eslint-config-javascript": "^0.8.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.10.0",
+    "babel-jest": "^30.2.0",
     "core-js": "^3.46.0",
-    "eslint": "^8.57.1",
-    "jest": "^29.7.0"
+    "eslint": "^9.39.1",
+    "jest": "^30.2.0"
   },
   "dependencies": {
     "@exercism/wasm-lib": "^0.2.0"

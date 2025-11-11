@@ -12,7 +12,7 @@
     {
       devShells.x86_64-linux.default = pkgs.mkShell {
         buildInputs = [
-          pkgs.nodejs_22
+          pkgs.nodejs_24
         ];
       };
     };

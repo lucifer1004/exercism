@@ -1,8 +1,16 @@
 # Root Justfile - Manage all language projects
 
+# Centralized list of all supported languages
+LANGUAGES := "python racket zig ocaml clojure wasm mips julia go"
+
 # List all available commands
 default:
     @just --list
+
+# List all supported languages
+languages:
+    @echo "Supported languages:"
+    @echo "{{LANGUAGES}}" | tr ' ' '\n' | sed 's/^/  - /'
 
 # Test all projects in all languages
 test-all:
@@ -12,7 +20,7 @@ test-all:
     echo "🧪 Testing all Exercism projects..."
     echo ""
     
-    for lang in python racket zig ocaml clojure wasm mips julia; do
+    for lang in {{LANGUAGES}}; do
         if [ -d "$lang" ] && [ -f "$lang/Justfile" ]; then
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             echo "📦 Testing $lang projects..."
@@ -36,7 +44,7 @@ test-lang lang:
 setup-all:
     #!/usr/bin/env bash
     echo "🔧 Setting up all development environments..."
-    for lang in python racket zig ocaml clojure wasm mips julia; do
+    for lang in {{LANGUAGES}}; do
         if [ -d "$lang" ] && [ -f "$lang/flake.nix" ]; then
             echo "Setting up $lang..."
             (cd "$lang" && nix develop --command echo "✓ $lang environment ready")
@@ -48,7 +56,7 @@ setup-all:
 update-all:
     #!/usr/bin/env bash
     echo "🔄 Updating all flake locks..."
-    for lang in python racket zig ocaml clojure wasm mips julia; do
+    for lang in {{LANGUAGES}}; do
         if [ -d "$lang" ] && [ -f "$lang/flake.nix" ]; then
             echo "Updating $lang..."
             (cd "$lang" && nix flake update)
@@ -90,7 +98,7 @@ stats:
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
     
-    for lang in python racket zig ocaml clojure wasm mips julia; do
+    for lang in {{LANGUAGES}}; do
         if [ -d "$lang" ]; then
             count=$(find "$lang" -mindepth 1 -maxdepth 1 -type d \
                     ! -name "node_modules" \

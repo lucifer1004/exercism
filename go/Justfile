@@ -1,0 +1,13 @@
+test project:
+    nix develop --command sh -c "cd {{project}} && go test"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/go.mod" ] || ls "$dir"/*_test.go >/dev/null 2>&1; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && go test"
+        fi
+    done
+

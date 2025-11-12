@@ -16,7 +16,8 @@ exercism/
 ├── clojure/     # Clojure + Leiningen
 ├── wasm/        # Node.js 24 + Jest 30 (npm workspaces)
 ├── mips/        # Java + MARS simulator
-└── julia/       # Julia
+├── julia/       # Julia 1.12
+└── go/          # Go + gopls
 ```
 
 ### Design Principles
@@ -149,8 +150,16 @@ just test hello-world    # Downloads mars.jar automatically
 ```bash
 cd julia
 nix develop
+just test rna-transcription  # Run specific exercise
+# or: cd rna-transcription && julia runtests.jl
+```
+
+#### Go
+```bash
+cd go
+nix develop
 just test hello-world    # Run specific exercise
-# or: cd hello-world && julia runtests.jl
+# or: cd hello-world && go test
 ```
 
 ## Technology Stack
@@ -164,15 +173,17 @@ just test hello-world    # Run specific exercise
 | Clojure  | Clojure + Leiningen | clojure.test | clojure-lsp |
 | WASM     | Node.js 24 | Jest 30 | - |
 | MIPS     | Java + MARS | MARS | - |
-| Julia    | Julia | Test stdlib | LanguageServer.jl |
+| Julia    | Julia 1.12 | Test stdlib | LanguageServer.jl |
+| Go       | Go + gotools | testing | gopls |
 
 ## Project Statistics
 
-- **Languages**: 8
-- **Exercises**: 19 (run `just stats` for breakdown)
-- **Lines of Config**: ~700 (was 700+ in monolithic design)
+- **Languages**: 9
+- **Exercises**: 20 (run `just stats` for breakdown)
+- **Lines of Config**: ~800
 - **Space Saved (WASM)**: 220MB via npm workspaces
-- **Global Commands**: 6 (`just --list` to see all)
+- **Global Commands**: 7 (`just --list` to see all)
+- **Centralized Management**: All languages defined in one place (run `just languages`)
 
 Run `just stats` for detailed per-language statistics.
 
@@ -183,6 +194,7 @@ The root `Justfile` provides commands to manage all languages as a whole:
 ### Available Commands
 
 ```bash
+just languages     # List all supported languages
 just test-all      # Run all tests in all languages
 just setup-all     # Verify all environments
 just update-all    # Update all flake locks
@@ -254,13 +266,61 @@ This project follows **Linus Torvalds' "good taste" principles**:
 **Julia**:
 - ✅ Added Julia environment (Julia 1.12.1)
 
+**Go**:
+- ✅ Added Go environment with gopls and gotools
+
 ## Contributing
+
+### Adding a New Exercise
 
 Each language environment is self-contained. To add a new exercise:
 
 1. Create the exercise directory in the appropriate language folder
 2. Add test files following the language's conventions
 3. Run `just test <project>` to verify
+
+### Adding a New Language
+
+To add support for a new language:
+
+1. **Create language directory**:
+   ```bash
+   mkdir <language>
+   ```
+
+2. **Create `flake.nix`**:
+   ```nix
+   {
+     description = "<Language> environment for Exercism";
+     inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+     outputs = { self, nixpkgs }:
+       let pkgs = import nixpkgs { system = "x86_64-linux"; };
+       in {
+         devShells.x86_64-linux.default = pkgs.mkShell {
+           buildInputs = [ pkgs.<language> ];
+         };
+       };
+   }
+   ```
+
+3. **Create `Justfile`**:
+   ```justfile
+   test project:
+       nix develop --command sh -c "cd {{project}} && <test-command>"
+   ```
+
+4. **Update global `Justfile`**:
+   - Add language to `LANGUAGES` variable (line 4)
+   - That's it! All global commands automatically pick it up
+
+5. **Run `nix flake lock`** in the language directory
+
+6. **Update `README.md`**:
+   - Add to architecture diagram
+   - Add usage example
+   - Add to technology stack table
+
+The centralized `LANGUAGES` variable ensures consistency across all global commands.
 
 ## License
 

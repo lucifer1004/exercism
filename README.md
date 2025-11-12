@@ -8,13 +8,15 @@ Each language has its own **independent development environment** using Nix flak
 
 ```
 exercism/
+├── Justfile     # Global project management
 ├── python/      # Python 3.14 + pytest
 ├── racket/      # Racket
 ├── zig/         # Zig + ZLS
 ├── ocaml/       # OCaml + Dune + LSP
 ├── clojure/     # Clojure + Leiningen
-├── wasm/        # Node.js 22 + Jest 30 (npm workspaces)
-└── mips/        # Java + MARS simulator
+├── wasm/        # Node.js 24 + Jest 30 (npm workspaces)
+├── mips/        # Java + MARS simulator
+└── julia/       # Julia
 ```
 
 ### Design Principles
@@ -36,7 +38,29 @@ experimental-features = nix-command flakes
 
 ## Quick Start
 
-### General Pattern
+### Global Commands (from root directory)
+
+```bash
+# Test all projects in all languages
+just test-all
+
+# Setup all development environments
+just setup-all
+
+# Update all flake locks
+just update-all
+
+# Clean all build artifacts
+just clean
+
+# Show project statistics
+just stats
+
+# Test specific language
+just test-lang python
+```
+
+### Per-Language Pattern
 
 ```bash
 # Enter language environment
@@ -121,6 +145,14 @@ just test hello-world    # Downloads mars.jar automatically
 # or: cd hello-world && java -jar ../mars.jar nc runner.mips impl.mips
 ```
 
+#### Julia
+```bash
+cd julia
+nix develop
+just test hello-world    # Run specific exercise
+# or: cd hello-world && julia runtests.jl
+```
+
 ## Technology Stack
 
 | Language | Toolchain | Test Framework | Language Server |
@@ -132,13 +164,50 @@ just test hello-world    # Downloads mars.jar automatically
 | Clojure  | Clojure + Leiningen | clojure.test | clojure-lsp |
 | WASM     | Node.js 24 | Jest 30 | - |
 | MIPS     | Java + MARS | MARS | - |
+| Julia    | Julia | Test stdlib | LanguageServer.jl |
 
 ## Project Statistics
 
-- **Languages**: 7
-- **Exercises**: 20+
-- **Lines of Config**: ~500 (down from 700+)
+- **Languages**: 8
+- **Exercises**: 19 (run `just stats` for breakdown)
+- **Lines of Config**: ~700 (was 700+ in monolithic design)
 - **Space Saved (WASM)**: 220MB via npm workspaces
+- **Global Commands**: 6 (`just --list` to see all)
+
+Run `just stats` for detailed per-language statistics.
+
+## Global Project Management
+
+The root `Justfile` provides commands to manage all languages as a whole:
+
+### Available Commands
+
+```bash
+just test-all      # Run all tests in all languages
+just setup-all     # Verify all environments
+just update-all    # Update all flake locks
+just clean         # Remove all build artifacts
+just stats         # Show exercise counts per language
+just test-lang <lang>  # Test all exercises in specific language
+```
+
+### Example Workflow
+
+```bash
+# Initial setup
+just setup-all
+
+# Work on exercises
+cd python && just test leap
+cd racket && just test knapsack
+
+# Before committing
+just test-all      # Verify everything works
+just clean         # Remove temporary files
+
+# Update dependencies
+just update-all
+```
 
 ## Development Philosophy
 
@@ -165,15 +234,25 @@ This project follows **Linus Torvalds' "good taste" principles**:
 
 ## Recent Upgrades
 
-### WASM (November 2025)
+### November 2025 - Major Refactoring
+
+**Architecture**:
+- ✅ Migrated from monolithic to per-language flakes
+- ✅ Added global project management (root `Justfile`)
+- ✅ Isolated all 8 languages into independent environments
+
+**WASM**:
 - ✅ Jest 29 → 30
 - ✅ ESLint 8 → 9 (flat config migration)
-- ✅ npm workspaces (67% space reduction)
+- ✅ npm workspaces (67% space reduction: 330MB → 110MB)
 - ✅ @types/node 20 → 24
 - ✅ All tests passing
 
-### Python (November 2025)
+**Python**:
 - ✅ Python 3.11 → 3.14
+
+**Julia**:
+- ✅ Added Julia environment (Julia 1.12.1)
 
 ## Contributing
 

@@ -1,0 +1,13 @@
+test project:
+    nix develop --command sh -c "cd {{project}} && julia runtests.jl"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/runtests.jl" ]; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && julia runtests.jl"
+        fi
+    done
+

@@ -95,47 +95,40 @@ cd <project> && <test-command>
 
 ### Language-Specific Usage
 
-#### Python
+#### Standard Pattern (Python, Racket, Zig, OCaml, Clojure, Julia, Go, Haskell, Rust, Elixir, Kotlin, Crystal)
+
+Most languages follow the same workflow:
+
 ```bash
-cd python
+cd <language>
 nix develop
-just test leap           # Run specific exercise
-# or: cd leap && pytest
+just test <project>    # Run specific exercise
+
+# Examples:
+just test leap         # Python/OCaml/Clojure
+just test hello-world  # Rust/Go/Haskell/Zig/Kotlin/Crystal/Elixir
+just test knapsack     # Racket
 ```
 
-#### Racket
-```bash
-cd racket
-nix develop
-just test knapsack       # Run specific exercise
-# or: cd knapsack && raco test .
-```
+**Manual commands** (if you prefer not using `just`):
+- **Python**: `cd <project> && pytest`
+- **Racket**: `cd <project> && raco test .`
+- **Zig**: `cd <project> && zig test test_*.zig`
+- **OCaml**: `cd <project> && dune test`
+- **Clojure**: `cd <project> && lein test`
+- **Julia**: `cd <project> && julia runtests.jl`
+- **Go**: `cd <project> && go test`
+- **Haskell**: `cd <project> && stack test`
+- **Rust**: `cd <project> && cargo test`
+- **Elixir**: `cd <project> && mix test`
+- **Kotlin**: `cd <project> && gradle test --no-daemon`
+- **Crystal**: `cd <project> && crystal spec`
 
-#### Zig
-```bash
-cd zig
-nix develop
-just test hello-world    # Run specific exercise
-# or: cd hello-world && zig test test_hello_world.zig
-```
+---
 
-#### OCaml
-```bash
-cd ocaml
-nix develop
-just test leap           # Run specific exercise
-# or: cd leap && dune test
-```
+#### Special Cases
 
-#### Clojure
-```bash
-cd clojure
-nix develop
-just test leap           # Run specific exercise
-# or: cd leap && lein test
-```
-
-#### WASM
+##### WASM (npm workspaces)
 
 WASM uses **npm workspaces** to share dependencies across projects (67% space saving).
 
@@ -143,9 +136,8 @@ WASM uses **npm workspaces** to share dependencies across projects (67% space sa
 cd wasm
 nix develop
 npm install              # First time only
-just test hello-world    # Run specific exercise
+just test hello-world
 just test darts
-# or: cd hello-world && npm test
 ```
 
 **Features:**
@@ -153,7 +145,7 @@ just test darts
 - Jest 30, ESLint 9 (latest major versions)
 - Flat ESLint config for modern tooling
 
-#### MIPS
+##### MIPS (auto-download MARS)
 
 MIPS automatically downloads the MARS simulator on first run.
 
@@ -161,74 +153,18 @@ MIPS automatically downloads the MARS simulator on first run.
 cd mips
 nix develop
 just test hello-world    # Downloads mars.jar automatically
-# or: cd hello-world && java -jar ../mars.jar nc runner.mips impl.mips
+# Manual: cd hello-world && java -jar ../mars.jar nc runner.mips impl.mips
 ```
 
-#### Julia
-```bash
-cd julia
-nix develop
-just test rna-transcription  # Run specific exercise
-# or: cd rna-transcription && julia runtests.jl
-```
-
-#### Go
-```bash
-cd go
-nix develop
-just test hello-world    # Run specific exercise
-# or: cd hello-world && go test
-```
-
-#### Haskell
-```bash
-cd haskell
-nix develop
-just test hello-world    # Run specific exercise
-# or: cd hello-world && stack test
-```
-
-#### Rust
-```bash
-cd rust
-nix develop
-just test hello-world    # Run specific exercise
-# or: cd hello-world && cargo test
-```
-
-#### Elixir
-```bash
-cd elixir
-nix develop
-just test hello-world    # Run specific exercise
-# or: cd hello-world && mix test
-```
-
-#### Kotlin
-```bash
-cd kotlin
-nix develop
-just test hello-world    # Run specific exercise
-# or: cd hello-world && gradle test --no-daemon
-```
-
-#### Crystal
-```bash
-cd crystal
-nix develop
-just test hello-world    # Run specific exercise
-# or: cd hello-world && crystal spec
-```
-
-#### Swift
+##### Swift (manual installation)
 
 **Note**: Swift requires manual installation. See [swift/README.md](swift/README.md) for setup instructions.
 
 ```bash
 # After installing Swift on your system:
 cd swift
-just test hello-world    # Run specific exercise
-# or: cd hello-world && swift test
+just test hello-world
+# Manual: cd hello-world && swift test
 ```
 
 ## Technology Stack

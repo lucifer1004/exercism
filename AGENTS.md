@@ -182,107 +182,32 @@ LANGUAGES := "python racket zig ocaml clojure wasm mips julia go haskell rust"
 
 ### Adding a New Language
 
-**Step-by-step**:
+**High-level workflow** (see README "Contributing" section for detailed templates):
 
-1. **Create directory**: `mkdir <language>`
+1. **Create language directory structure**:
+   - `flake.nix` (Nix environment) or manual install docs
+   - `Justfile` (MUST implement: `setup`, `clean`, `test`, `test-all`)
+   - `.gitignore` (language-specific artifacts ONLY)
 
-2. **Create `flake.nix`** (template):
-```nix
-{
-  description = "<Language> environment for Exercism";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  outputs = { self, nixpkgs }:
-    let pkgs = import nixpkgs { system = "x86_64-linux"; };
-    in {
-      devShells.x86_64-linux.default = pkgs.mkShell {
-        buildInputs = [
-          pkgs.<language>
-          pkgs.<language-server>  # LSP for editor support
-          # Add language-specific tools
-        ];
-      };
-    };
-}
-```
+2. **Update `LANGUAGES` variable** (root `Justfile` line 4):
+   - This ONE change enables all global commands (`setup-all`, `test-all`, `clean`, etc.)
+   - No need to modify other parts of global Justfile (uses delegation pattern)
 
-3. **Create `Justfile`**:
-```justfile
-setup:
-    @nix develop --command echo "<Language> environment ready"
+3. **Update `README.md`** (see "Adding a New Language" in README for locations):
+   - **Standard pattern**: Add name to "Standard Pattern" list
+   - **Special case**: Add subsection under "Special Cases" with explanation
+   - Update architecture diagram, tech stack table, statistics, recent upgrades
 
-clean:
-    @find . -type d -name "<build-dir>" -exec rm -rf {} + 2>/dev/null || true
-    @find . -name "<lock-file>" -type f -delete 2>/dev/null || true
-
-test project:
-    nix develop --command sh -c "cd {{project}} && <test-command>"
-
-test-all:
-    #!/usr/bin/env bash
-    set -e
-    for dir in */; do
-        # Add logic to detect and test projects
-    done
-```
-
-4. **Create `<language>/.gitignore`**: Language-specific build artifacts
-   ```gitignore
-   # <Language> build artifacts
-   <build-dir>/
-   <cache-dir>/
-   # Language-specific patterns
-   ```
-   **CRITICAL**: Never add language-specific patterns to root `.gitignore`.
-   Root `.gitignore` is ONLY for universal patterns (editor, Nix, direnv).
-
-5. **Update `Justfile` line 4**: Add language to `LANGUAGES` variable
-   (No need to update `clean` command - it automatically delegates!)
-
-6. **Update `README.md`**:
-   - Add to architecture diagram (line ~10)
-   - Add usage example (line ~80)
-   - Add to technology stack table (line ~185)
-   - Increment language count (line ~201)
-   - Add to recent upgrades (line ~295)
-
-7. **Test**: 
-   ```bash
-   just setup <language>      # Verify environment builds
-   just clean-lang <language> # Verify cleanup works
-   just test-lang <language>  # Verify tests run
-   ```
+4. **Verify**: Run `just setup <language>`, `just test-lang <language>`, `just clean-lang <language>`
 
 ### Testing Strategy
 
-**Single language operations**:
-```bash
-# From root directory
-just setup <language>         # Setup environment
-just test-lang <language>     # Run all tests
-just clean-lang <language>    # Clean artifacts
-just update <language>        # Update flake lock
+**See README "Quick Start" and "Global Project Management" sections for complete command reference.**
 
-# From language directory
-cd <language>
-just setup                    # Setup environment
-just test <project>           # Test one project
-just test-all                 # Test all projects
-just clean                    # Clean artifacts
-```
-
-**Global operations**:
-```bash
-just setup-all   # Setup all environments
-just test-all    # Test everything
-just clean       # Clean everything
-just update-all  # Update all flake locks
-```
-
-**Before committing**:
-```bash
-just test-all   # Verify all tests pass
-just clean      # Remove build artifacts
-```
+**Key workflow**:
+- Test single language: `just test-lang <language>` (from root)
+- Test everything: `just test-all` (always run before committing)
+- Clean artifacts: `just clean` (run before committing)
 
 ### Clean-up Rules
 
@@ -303,87 +228,36 @@ clean:
     @find . -type d -name "<build-dir>" -exec rm -rf {} + 2>/dev/null || true
 ```
 
-**Common build artifacts to clean**:
-- Python: `__pycache__/`, `.pytest_cache/`
-- Rust: `target/`, `Cargo.lock`
-- Haskell: `.stack-work/`, `dist-newstyle/`
-- Go: `go.sum`
-- OCaml: `_build/`
-- Zig: `zig-cache/`
-- Clojure: `target/`
-- WASM: `node_modules/`
-- Julia: `.julia/`
-- Kotlin: `build/`, `.gradle/`
-- Elixir: `_build/`, `deps/`, `*.beam`
+**Architecture principle**: Delegation over centralization. Each language knows how to clean itself.
 
 ## Language-Specific Patterns
 
-### Test Command Templates
-
-| Language | Test Command | Detection |
-|----------|-------------|-----------|
-| Python | `pytest` | `*_test.py` |
-| Rust | `cargo test` | `Cargo.toml` |
-| Go | `go test` | `go.mod` or `*_test.go` |
-| Haskell | `stack test` | `stack.yaml` |
-| Julia | `julia runtests.jl` | `runtests.jl` |
-| Racket | `raco test .` | `*-test.rkt` |
-| Zig | `zig test test_*.zig` | `test_*.zig` |
-| OCaml | `dune test` | `dune` |
-| Clojure | `lein test` | `project.clj` |
-| MIPS | `java -jar ../mars.jar nc runner.mips impl.mips` | `runner.mips` |
-| WASM | `npm test` | `package.json` |
-| Kotlin | `gradle test --no-daemon` | `build.gradle.kts` or `build.gradle` |
-| Elixir | `mix test` | `mix.exs` |
-
-### Language Server Packages (for LSP support)
-
-| Language | Package Name | Purpose |
-|----------|-------------|---------|
-| Python | Built-in | Type checking via mypy/pylance |
-| Rust | `rust-analyzer` | Full IDE support |
-| Go | `gopls` | Official language server |
-| Haskell | `haskell-language-server` | HLS |
-| OCaml | `ocamlPackages.lsp` | ocaml-lsp-server |
-| Zig | `zls` | Zig Language Server |
-| Clojure | Install via `clojure-lsp` | Via Clojure ecosystem |
-| Racket | Install via `raco` | racket-langserver |
-| Julia | Install via Julia pkg | LanguageServer.jl |
-| Kotlin | `kotlin-language-server` | Kotlin LSP |
-| Elixir | `elixir-ls` | ElixirLS |
+**For language-specific details (test commands, build artifacts, LSP packages), see**:
+- **README "Technology Stack" section**: Complete table of toolchains, test frameworks, language servers
+- **Individual `<language>/Justfile`**: Test and clean command implementations
+- **Individual `<language>/.gitignore`**: Build artifact patterns
 
 ## Special Cases
 
+**See README "Language-Specific Usage → Special Cases" for usage details.**
+
 ### WASM (npm workspaces)
 
-WASM uses a **shared dependency model** to save space (67% reduction):
+**Why special**: Uses npm workspaces to share dependencies (67% space saving: 330MB → 110MB)
 
-```
-wasm/
-├── package.json       # Root with workspaces
-├── node_modules/      # Shared (110MB instead of 330MB)
-├── eslint.config.js   # Shared ESLint 9 config
-└── [projects]/        # Minimal package.json each
-```
-
-**Key files**:
-- Root `package.json` has all dependencies
-- Sub-projects reference `../node_modules/.bin/`
-- Use `npx` for automatic path resolution
+**Architecture principle**: Use language ecosystem tools (npm workspaces) before inventing custom solutions.
 
 ### MIPS (auto-download MARS)
 
-MIPS Justfile automatically downloads MARS simulator:
+**Why special**: MARS simulator not in nixpkgs, Justfile auto-downloads on first run
 
-```justfile
-setup:
-    @test -f mars.jar || wget -O mars.jar <URL>
+**Architecture principle**: Pragmatism over purity. Auto-download > forcing manual installation.
 
-test project: setup
-    # Uses mars.jar
-```
+### Swift (manual installation)
 
-**Pattern**: Dependencies that can't be in nixpkgs can be auto-downloaded.
+**Why special**: Swift's Linux toolchain has fundamental issues with Nix isolation
+
+**Architecture principle**: "Talk is cheap. Show me the code." - Working solution > theoretical purity.
 
 ## Critical Rules
 
@@ -421,7 +295,13 @@ mkdir <language>
 # 3. Write Justfile with setup/clean/test/test-all
 # 4. Write <language>/.gitignore (language-specific artifacts)
 # 5. Update LANGUAGES variable in root Justfile (ONE line!)
-# 6. Update README.md (5 locations)
+# 6. Update README.md:
+#    - Add to architecture diagram (line ~10)
+#    - Add language name to "Standard Pattern" parentheses (line ~98) - UNLESS it's a special case
+#    - If special case: add new subsection under "Special Cases" with explanation
+#    - Add to technology stack table (line ~171)
+#    - Increment language count (line ~192)
+#    - Add to recent upgrades (line ~331)
 # 7. Test: just setup <language> && just clean-lang <language> && just test-lang <language>
 ```
 
@@ -705,99 +585,6 @@ A well-integrated language should:
 5. **Be clean**: `just clean` removes all artifacts
 6. **Be discoverable**: Shows in `just languages` and `just stats`
 
-## Example: Adding Kotlin
-
-```bash
-# 1. Create structure
-mkdir kotlin
-cd kotlin
-
-# 2. Create flake.nix
-cat > flake.nix << 'EOF'
-{
-  description = "Kotlin environment for Exercism";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  outputs = { self, nixpkgs }:
-    let pkgs = import nixpkgs { system = "x86_64-linux"; };
-    in {
-      devShells.x86_64-linux.default = pkgs.mkShell {
-        buildInputs = [
-          pkgs.jdk21
-          pkgs.kotlin
-          pkgs.gradle
-          pkgs.kotlin-language-server
-        ];
-      };
-    };
-}
-EOF
-
-# 3. Create Justfile
-cat > Justfile << 'EOF'
-setup:
-    @nix develop --command echo "Kotlin environment ready"
-
-clean:
-    @find . -type d -name "build" -exec rm -rf {} + 2>/dev/null || true
-    @find . -type d -name ".gradle" -exec rm -rf {} + 2>/dev/null || true
-
-test project:
-    nix develop --command sh -c "cd {{project}} && gradle test --no-daemon"
-
-test-all:
-    #!/usr/bin/env bash
-    set -e
-    for dir in */; do
-        if [ -f "$dir/build.gradle.kts" ] || [ -f "$dir/build.gradle" ]; then
-            echo "Testing ${dir%/}..."
-            nix develop --command sh -c "cd $dir && gradle test --no-daemon"
-        fi
-    done
-EOF
-
-# 4. Create .gitignore
-cat > .gitignore << 'EOF'
-# Gradle build artifacts
-build/
-.gradle/
-gradle.properties
-
-# Kotlin compiled files
-*.class
-*.jar
-*.war
-*.ear
-
-# Local configuration
-local.properties
-
-# IntelliJ IDEA
-.idea/
-*.iml
-*.ipr
-*.iws
-out/
-
-# Kotlin specific
-.kotlin/
-EOF
-
-# 5. Update LANGUAGES in root Justfile
-# Change line 4 to:
-# LANGUAGES := "python racket ... rust elixir kotlin"
-# (No need to update clean command - automatic delegation!)
-
-# 6. Update README.md
-# Add to architecture, usage, tech stack, stats, upgrades
-
-# 7. Verify
-cd ..
-just setup kotlin       # Verify environment
-just clean-lang kotlin  # Verify cleanup
-just test-lang kotlin   # Verify tests
-just languages          # Should show kotlin
-```
-
 ## Anti-Patterns to Avoid
 
 ### ❌ Monolithic flake.nix
@@ -874,70 +661,44 @@ test-all:
     done
 ```
 
+### ❌ Duplicating language examples in documentation
+
+```markdown
+# BAD - separate example for each language
+#### Python
+cd python && just test leap
+
+#### Rust
+cd rust && just test hello-world
+
+#### Go
+cd go && just test hello-world
+... (12 more identical patterns)
+
+# GOOD - one pattern + exceptions
+#### Standard Pattern (Python, Rust, Go, ...)
+cd <language> && just test <project>
+
+#### Special Cases
+##### WASM (npm workspaces)
+cd wasm && npm install && just test <project>
+```
+
+**Why pattern-based documentation is better**:
+- Add new language: add name to parentheses (0 lines of duplication)
+- Reader sees the pattern, not 15 examples
+- Special cases stand out instead of being buried
+- "Good taste": 12 identical examples = 1 pattern
+
 ## Quick Reference
 
-### Most Common Commands
+**For complete command reference, see README "Quick Start" and "Global Project Management" sections.**
 
-**Global commands** (from root):
-```bash
-just languages           # List all languages
-just stats              # Show exercise counts
-just setup-all          # Setup all environments
-just test-all           # Run all tests
-just clean              # Remove all build artifacts
-just update-all         # Update all flake locks
-```
-
-**Single language commands** (from root):
-```bash
-just setup <language>        # Setup environment
-just test-lang <language>    # Test all projects
-just clean-lang <language>   # Clean artifacts
-just update <language>       # Update flake lock
-```
-
-**Per-project commands** (from language directory):
-```bash
-cd <language>
-just setup             # Setup environment
-just test <project>    # Test one project
-just test-all          # Test all projects
-just clean             # Clean artifacts
-nix develop            # Enter development shell (Nix-managed only)
-```
-
-### Debugging
-
-```bash
-# Check language configuration
-cat <language>/flake.nix
-
-# Verify Justfile syntax
-just --list --justfile <language>/Justfile
-
-# Test environment manually
-cd <language>
-nix develop --command <language-command> --version
-```
-
-## Maintenance Tasks
-
-### Weekly
-
-- `just test-all` - Ensure all exercises still pass
-- Check for new exercises on exercism.org
-
-### Monthly
-
-- `just update-all` - Update all flake locks
-- `just test-all` - Verify no breakage
-- Review and update outdated packages (especially WASM/npm)
-
-### As Needed
-
-- `just clean` before committing
-- Update README.md when adding exercises
-- Update this file when patterns change
+**Most critical commands for AI agents**:
+- `just test-all` - Always run before finishing a task
+- `just clean` - Always run before committing
+- `just languages` - Verify language added to LANGUAGES variable
+- `just stats` - Verify exercise counts after changes
 
 ## Context for AI Agents
 
@@ -1023,6 +784,19 @@ When suggesting changes:
 **Result**: Add language = change 1 line
 
 **Lesson**: Single source of truth eliminates inconsistency.
+
+### README documentation deduplication
+
+**Problem**: README had 15 separate language examples, 12 were identical (137 lines of repetition)
+
+**Solution**: Restructured to 1 standard pattern + 3 special cases
+
+**Result**: 
+- 46% reduction in documentation size (137 → 73 lines)
+- Adding new language: add name to parentheses (zero code duplication)
+- Special cases clearly separated from standard workflow
+
+**Lesson**: "Good taste" applies to documentation too. Eliminate special cases by identifying the underlying pattern. When you have 12 identical examples, you don't have 12 examples—you have 1 pattern.
 
 ## Final Notes
 

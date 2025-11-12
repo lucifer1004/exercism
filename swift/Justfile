@@ -1,0 +1,19 @@
+# Swift Exercism projects
+# Note: Requires Swift to be installed on your system
+# See README.md for installation instructions
+
+# Test a specific project
+test project:
+    cd {{project}} && swift test
+
+# Test all projects
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/Package.swift" ]; then
+            echo "Testing ${dir%/}..."
+            (cd "$dir" && swift test)
+        fi
+    done
+

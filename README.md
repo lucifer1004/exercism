@@ -19,17 +19,21 @@ exercism/
 ├── julia/       # Julia 1.12
 ├── go/          # Go + gopls
 ├── haskell/     # GHC + Stack + HLS
-└── rust/        # Rust + Cargo + rust-analyzer
+├── rust/        # Rust + Cargo + rust-analyzer
+└── swift/       # Swift (manual installation required)
 ```
 
 ### Design Principles
 
 - **Isolation**: Each language is self-contained with zero cross-dependencies
-- **Reproducibility**: Nix ensures consistent environments across machines
+- **Reproducibility**: Nix ensures consistent environments across machines (where feasible)
+- **Pragmatism**: When tools don't integrate cleanly, use them as intended
 - **Automation**: Just recipes for common tasks
 - **Modern tooling**: Latest stable versions with language servers
 
 ## Prerequisites
+
+### For Nix-managed languages (Python, Rust, Go, etc.)
 
 - [Nix](https://nixos.org/download.html) with flakes enabled
 - [just](https://github.com/casey/just) (optional, for convenient commands)
@@ -38,6 +42,10 @@ Enable flakes in `~/.config/nix/nix.conf`:
 ```
 experimental-features = nix-command flakes
 ```
+
+### For manually-installed languages
+
+- **Swift**: See [swift/README.md](swift/README.md) for installation instructions
 
 ## Quick Start
 
@@ -180,6 +188,17 @@ just test hello-world    # Run specific exercise
 # or: cd hello-world && cargo test
 ```
 
+#### Swift
+
+**Note**: Swift requires manual installation. See [swift/README.md](swift/README.md) for setup instructions.
+
+```bash
+# After installing Swift on your system:
+cd swift
+just test hello-world    # Run specific exercise
+# or: cd hello-world && swift test
+```
+
 ## Technology Stack
 
 | Language | Toolchain | Test Framework | Language Server |
@@ -195,12 +214,13 @@ just test hello-world    # Run specific exercise
 | Go       | Go + gotools | testing | gopls |
 | Haskell  | GHC + Stack | hspec/HUnit | HLS |
 | Rust     | Cargo + Clippy | Built-in | rust-analyzer |
+| Swift    | Swift Package Manager (manual) | XCTest | - |
 
 ## Project Statistics
 
-- **Languages**: 11
+- **Languages**: 12 (11 Nix-managed + 1 manual)
 - **Exercises**: 21+ (run `just stats` for breakdown)
-- **Lines of Config**: ~800
+- **Lines of Config**: ~600
 - **Space Saved (WASM)**: 220MB via npm workspaces
 - **Global Commands**: 7 (`just --list` to see all)
 - **Centralized Management**: All languages defined in one place (run `just languages`)
@@ -259,10 +279,15 @@ This project follows **Linus Torvalds' "good taste" principles**:
 - Difficult to maintain
 
 **After** (isolated environments):
-- One language = One `flake.nix`
+- One language = One `flake.nix` (when tool integrates well)
 - Zero conflicts
 - Independent updates
 - Clean 1:1 mapping
+
+**Exception (Swift)**:
+- Swift's Linux toolchain has fundamental issues with Nix isolation
+- Pragmatic solution: require manual installation
+- **"Talk is cheap. Show me the code."** - Working solution > theoretical purity
 
 ## Recent Upgrades
 
@@ -294,6 +319,11 @@ This project follows **Linus Torvalds' "good taste" principles**:
 
 **Rust**:
 - ✅ Added Rust environment with Cargo, Clippy, and rust-analyzer
+
+**Swift**:
+- ✅ Added Swift support (requires manual installation)
+- 📝 Pragmatic decision: Swift toolchain doesn't integrate cleanly with Nix on Linux
+- 📖 See swift/README.md for installation guide
 
 ## Contributing
 

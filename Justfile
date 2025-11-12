@@ -2,6 +2,7 @@
 
 # Centralized list of all supported languages
 LANGUAGES := "python racket zig ocaml clojure wasm mips julia go haskell rust"
+MANUAL_LANGUAGES := "swift"  # Languages that require manual installation
 
 # List all available commands
 default:
@@ -9,8 +10,11 @@ default:
 
 # List all supported languages
 languages:
-    @echo "Supported languages:"
+    @echo "Nix-managed languages:"
     @echo "{{LANGUAGES}}" | tr ' ' '\n' | sed 's/^/  - /'
+    @echo ""
+    @echo "Manual installation required:"
+    @echo "{{MANUAL_LANGUAGES}}" | tr ' ' '\n' | sed 's/^/  - /'
 
 # Test all projects in all languages
 test-all:
@@ -20,7 +24,7 @@ test-all:
     echo "🧪 Testing all Exercism projects..."
     echo ""
     
-    for lang in {{LANGUAGES}}; do
+    for lang in {{LANGUAGES}} {{MANUAL_LANGUAGES}}; do
         if [ -d "$lang" ] && [ -f "$lang/Justfile" ]; then
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             echo "📦 Testing $lang projects..."
@@ -103,6 +107,10 @@ clean:
     find rust -type d -name "target" -exec rm -rf {} + 2>/dev/null || true
     find rust -name "Cargo.lock" -type f -delete 2>/dev/null || true
     
+    # Swift
+    find swift -type d -name ".build" -exec rm -rf {} + 2>/dev/null || true
+    find swift -name "Package.resolved" -type f -delete 2>/dev/null || true
+    
     echo "✅ Cleanup complete!"
 
 # Show project statistics
@@ -112,7 +120,7 @@ stats:
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
     
-    for lang in {{LANGUAGES}}; do
+    for lang in {{LANGUAGES}} {{MANUAL_LANGUAGES}}; do
         if [ -d "$lang" ]; then
             count=$(find "$lang" -mindepth 1 -maxdepth 1 -type d \
                     ! -name "node_modules" \

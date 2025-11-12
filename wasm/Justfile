@@ -1,3 +1,16 @@
-test project:
+setup:
+    nix develop --command sh -c "npm install"
+
+test project: setup
     nix develop --command sh -c "cd {{project}} && npm test"
+
+test-all: setup
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/package.json" ] && [ "$dir" != "node_modules/" ]; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && npm test"
+        fi
+    done
 

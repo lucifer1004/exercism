@@ -1,2 +1,12 @@
 test project:
     nix develop --command sh -c "cd {{project}} && dune test"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/dune" ] || [ -f "$dir/dune-project" ]; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && dune test"
+        fi
+    done

@@ -3,3 +3,13 @@ setup:
 
 test project: setup
     nix develop --command sh -c "cd {{project}} && java -jar ../mars.jar nc runner.mips impl.mips"
+
+test-all: setup
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/runner.mips" ]; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && java -jar ../mars.jar nc runner.mips impl.mips"
+        fi
+    done

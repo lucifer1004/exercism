@@ -1,0 +1,13 @@
+# Elixir build artifacts
+**/_build/
+**/deps/
+*.beam
+*.ez
+
+# Mix
+.fetch
+erl_crash.dump
+
+# Local configuration
+.elixir_ls/
+

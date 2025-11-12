@@ -1,2 +1,12 @@
 test project:
     nix develop --command sh -c "cd {{project}} && zig test test*"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if ls "$dir"/test_*.zig >/dev/null 2>&1 || ls "$dir"/test*.zig >/dev/null 2>&1; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && zig test test*"
+        fi
+    done

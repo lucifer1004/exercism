@@ -20,6 +20,7 @@ exercism/
 ├── go/          # Go + gopls
 ├── haskell/     # GHC + Stack + HLS
 ├── rust/        # Rust + Cargo + rust-analyzer
+├── elixir/      # Elixir + Mix + ElixirLS
 └── swift/       # Swift (manual installation required)
 ```
 
@@ -188,6 +189,14 @@ just test hello-world    # Run specific exercise
 # or: cd hello-world && cargo test
 ```
 
+#### Elixir
+```bash
+cd elixir
+nix develop
+just test hello-world    # Run specific exercise
+# or: cd hello-world && mix test
+```
+
 #### Swift
 
 **Note**: Swift requires manual installation. See [swift/README.md](swift/README.md) for setup instructions.
@@ -214,11 +223,12 @@ just test hello-world    # Run specific exercise
 | Go       | Go + gotools | testing | gopls |
 | Haskell  | GHC + Stack | hspec/HUnit | HLS |
 | Rust     | Cargo + Clippy | Built-in | rust-analyzer |
+| Elixir   | Elixir + Mix | ExUnit | ElixirLS |
 | Swift    | Swift Package Manager (manual) | XCTest | - |
 
 ## Project Statistics
 
-- **Languages**: 12 (11 Nix-managed + 1 manual)
+- **Languages**: 13 (12 Nix-managed + 1 manual)
 - **Exercises**: 21+ (run `just stats` for breakdown)
 - **Lines of Config**: ~600
 - **Space Saved (WASM)**: 220MB via npm workspaces
@@ -324,6 +334,9 @@ This project follows **Linus Torvalds' "good taste" principles**:
 - ✅ Added Swift support (requires manual installation)
 - 📝 Pragmatic decision: Swift toolchain doesn't integrate cleanly with Nix on Linux
 - 📖 See swift/README.md for installation guide
+
+**Elixir**:
+- ✅ Added Elixir environment with Mix and ElixirLS
 
 ## Contributing
 

@@ -1,2 +1,12 @@
 test project:
     nix develop --command sh -c "cd {{project}} && lein test"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/project.clj" ]; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && lein test"
+        fi
+    done

@@ -1,0 +1,5 @@
+# Racket build artifacts
+compiled/
+*.zo
+*.dep
+

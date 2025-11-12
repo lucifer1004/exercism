@@ -1,3 +1,9 @@
+setup:
+    @nix develop --command echo "Go environment ready"
+
+clean:
+    @find . -name "go.sum" -type f -delete 2>/dev/null || true
+
 test project:
     nix develop --command sh -c "cd {{project}} && go test"
 

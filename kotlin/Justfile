@@ -1,3 +1,10 @@
+setup:
+    @nix develop --command echo "Kotlin environment ready"
+
+clean:
+    @find . -type d -name "build" -exec rm -rf {} + 2>/dev/null || true
+    @find . -type d -name ".gradle" -exec rm -rf {} + 2>/dev/null || true
+
 test project:
     nix develop --command sh -c "cd {{project}} && gradle test --no-daemon"
 

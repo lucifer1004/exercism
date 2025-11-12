@@ -1,6 +1,9 @@
 setup:
     @test -f mars.jar || wget -O mars.jar https://github.com/dpetersanderson/MARS/releases/download/v.4.5.1/Mars4_5.jar
 
+clean:
+    @rm -f mars.jar 2>/dev/null || true
+
 test project: setup
     nix develop --command sh -c "cd {{project}} && java -jar ../mars.jar nc runner.mips impl.mips"
 

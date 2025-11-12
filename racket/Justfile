@@ -1,3 +1,9 @@
+setup:
+    @nix develop --command echo "Racket environment ready"
+
+clean:
+    @echo "Racket: no build artifacts to clean"
+
 test project:
     nix develop --command sh -c "cd {{project}} && raco test ."
 

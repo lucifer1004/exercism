@@ -26,27 +26,110 @@ language/
 
 **Critical**: Each language is **completely isolated**. No shared dependencies, no global state.
 
+## Documentation Maintenance
+
+**Critical Principle**: Documentation must evolve with code. Stale docs are worse than no docs.
+
+### When to Update Documentation
+
+**1. General Rules (Update Root `AGENTS.md`)**
+
+If a user's instruction can be generalized into a **project-wide pattern**, add it to this file:
+- Architectural decisions (e.g., "delegate cleanup to language modules")
+- Global workflow patterns (e.g., "add language = modify ONE variable")
+- Project-wide conventions (e.g., "never add language-specific rules to root .gitignore")
+- Common pitfalls and anti-patterns
+- New global commands or workflows
+
+**Examples**:
+- User: "Don't hardcode cleanup rules in global Justfile" → Add to anti-patterns section
+- User: "Use language-level .gitignore" → Add to mandatory files section
+- User: "Add single-language commands for verification" → Update command reference
+
+**2. Language-Specific Rules (Create/Update `<language>/AGENTS.md`)**
+
+If a user's instruction is **specific to one language**, document it in that language's directory:
+- Language-specific build quirks (e.g., "Gradle needs --no-daemon flag")
+- Special testing requirements (e.g., "MIPS auto-downloads MARS simulator")
+- Language ecosystem conventions (e.g., "WASM uses npm workspaces")
+- Toolchain-specific issues (e.g., "Swift requires manual installation on Linux")
+- Language-specific debugging tips
+
+**File structure**:
+```
+<language>/
+├── AGENTS.md          # Language-specific guide for AI agents
+├── flake.nix
+├── Justfile
+└── .gitignore
+```
+
+**Examples**:
+- User: "Kotlin Gradle daemon causes issues in CI" → `kotlin/AGENTS.md`
+- User: "Python pytest needs specific markers for async tests" → `python/AGENTS.md`
+- User: "Rust exercises should use workspace members" → `rust/AGENTS.md`
+
+**3. Configuration Changes (Update Relevant Docs)**
+
+When project structure or language settings change, update documentation:
+
+**Global changes** → Update root `AGENTS.md` and `README.md`:
+- Adding new global commands
+- Changing LANGUAGES variable format
+- Modifying global Justfile delegation pattern
+- Updating verification checklist
+
+**Language changes** → Update `<language>/AGENTS.md`:
+- New testing framework
+- Different build tool
+- Changed dependency management
+- New environment requirements
+
+### Documentation Update Checklist
+
+When implementing user instructions:
+
+- [ ] **Identify scope**: General rule or language-specific?
+- [ ] **Extract principle**: What's the underlying pattern?
+- [ ] **Update docs**: Add to appropriate AGENTS.md
+- [ ] **Verify consistency**: Does it contradict existing rules?
+- [ ] **Update examples**: Reflect new patterns in examples
+
+### Meta-Rule: Self-Improvement
+
+**This section itself follows the principle**: If you discover a new category of documentation maintenance, add it here.
+
+**Living document**: AGENTS.md should be the **source of truth** for how AI agents work with this codebase. When you learn something new about the project, capture it.
+
 ## Project Structure
 
 ```
 exercism/
 ├── Justfile                 # Global management (SINGLE SOURCE OF TRUTH)
 ├── README.md                # User documentation
-├── AGENTS.md                # This file
-├── .gitignore               # Ignore build artifacts
+├── AGENTS.md                # This file (global rules for AI agents)
+├── .gitignore               # Universal patterns only
 │
 ├── python/                  # Independent environment
-│   ├── flake.nix
-│   ├── Justfile
-│   └── leap/
+│   ├── flake.nix            # Python toolchain
+│   ├── Justfile             # Python commands (setup/clean/test/test-all)
+│   ├── .gitignore           # Python-specific artifacts
+│   ├── AGENTS.md            # (Optional) Python-specific AI guide
+│   └── leap/                # Exercise
 │
 ├── rust/                    # Independent environment
 │   ├── flake.nix
 │   ├── Justfile
+│   ├── .gitignore
+│   ├── AGENTS.md            # (Optional) Rust-specific AI guide
 │   └── hello-world/
 │
-└── [10 more languages...]   # Each completely isolated
+└── [11 more languages...]   # Each completely isolated
 ```
+
+**Documentation Hierarchy**:
+- Root `AGENTS.md`: Project-wide patterns and architecture
+- `<language>/AGENTS.md`: Language-specific quirks and conventions (optional, create when needed)
 
 ## The LANGUAGES Variable - Single Source of Truth
 
@@ -94,6 +177,13 @@ LANGUAGES := "python racket zig ocaml clojure wasm mips julia go haskell rust"
 
 3. **Create `Justfile`**:
 ```justfile
+setup:
+    @nix develop --command echo "<Language> environment ready"
+
+clean:
+    @find . -type d -name "<build-dir>" -exec rm -rf {} + 2>/dev/null || true
+    @find . -name "<lock-file>" -type f -delete 2>/dev/null || true
+
 test project:
     nix develop --command sh -c "cd {{project}} && <test-command>"
 
@@ -116,6 +206,7 @@ test-all:
    Root `.gitignore` is ONLY for universal patterns (editor, Nix, direnv).
 
 5. **Update `Justfile` line 4**: Add language to `LANGUAGES` variable
+   (No need to update `clean` command - it automatically delegates!)
 
 6. **Update `README.md`**:
    - Add to architecture diagram (line ~10)
@@ -124,20 +215,37 @@ test-all:
    - Increment language count (line ~201)
    - Add to recent upgrades (line ~295)
 
-7. **Test**: `just setup-all` to verify the environment
+7. **Test**: 
+   ```bash
+   just setup <language>      # Verify environment builds
+   just clean-lang <language> # Verify cleanup works
+   just test-lang <language>  # Verify tests run
+   ```
 
 ### Testing Strategy
 
-**Per-language testing**:
+**Single language operations**:
 ```bash
+# From root directory
+just setup <language>         # Setup environment
+just test-lang <language>     # Run all tests
+just clean-lang <language>    # Clean artifacts
+just update <language>        # Update flake lock
+
+# From language directory
 cd <language>
-just test <project>
+just setup                    # Setup environment
+just test <project>           # Test one project
+just test-all                 # Test all projects
+just clean                    # Clean artifacts
 ```
 
-**Global testing**:
+**Global operations**:
 ```bash
-just test-all        # Test everything
-just test-lang rust  # Test specific language
+just setup-all   # Setup all environments
+just test-all    # Test everything
+just clean       # Clean everything
+just update-all  # Update all flake locks
 ```
 
 **Before committing**:
@@ -148,15 +256,24 @@ just clean      # Remove build artifacts
 
 ### Clean-up Rules
 
-When adding a language, update the `clean` command in root `Justfile` (line ~60):
+**Critical**: Each language manages its own cleanup via `just clean` in its Justfile.
+The global `just clean` automatically delegates to all languages.
 
+**No need to update global Justfile** - it uses delegation pattern:
 ```justfile
-# <Language>
-find <language> -type d -name "<build-dir>" -exec rm -rf {} + 2>/dev/null || true
-find <language> -name "<lock-file>" -type f -delete 2>/dev/null || true
+clean:
+    for lang in {{LANGUAGES}} {{MANUAL_LANGUAGES}}; do
+        (cd "$lang" && just clean) || true
+    done
 ```
 
-**Common build artifacts**:
+**Language Justfile must implement**:
+```justfile
+clean:
+    @find . -type d -name "<build-dir>" -exec rm -rf {} + 2>/dev/null || true
+```
+
+**Common build artifacts to clean**:
 - Python: `__pycache__/`, `.pytest_cache/`
 - Rust: `target/`, `Cargo.lock`
 - Haskell: `.stack-work/`, `dist-newstyle/`
@@ -245,11 +362,12 @@ test project: setup
 ✅ **Keep languages isolated**: No cross-language dependencies
 ✅ **Use the LANGUAGES variable**: Single source of truth
 ✅ **Include language server**: Essential for good DX
-✅ **Add test-all to language Justfile**: For batch testing
+✅ **Add setup/clean/test-all to language Justfile**: Standard interface for all languages
 ✅ **Create `<language>/.gitignore`**: Each language manages its own build artifacts
-✅ **Update all 3 files**: Justfile (line 4), README.md, language's own files
+✅ **Update LANGUAGES variable**: Single line change in root Justfile
+✅ **Update README.md**: Document the new language
+✅ **Update AGENTS.md**: Capture general patterns and language-specific quirks
 ✅ **Test before committing**: `just test-all`
-✅ **Clean build artifacts**: Add to `clean` command
 
 ### DON'T
 
@@ -259,6 +377,7 @@ test project: setup
 ❌ **Don't add global dependencies**: Each language manages its own
 ❌ **Don't mix language concerns**: Python code in Rust directory, etc.
 ❌ **Don't add language-specific patterns to root `.gitignore`**: Use `<language>/.gitignore` instead
+❌ **Don't let documentation drift**: Update AGENTS.md when patterns change
 ❌ **Don't commit build artifacts**: Use `just clean` first
 
 ## Common Tasks for AI Agents
@@ -269,11 +388,11 @@ test project: setup
 # 1. Create structure
 mkdir <language>
 # 2. Write flake.nix (use template above)
-# 3. Write Justfile (use template above)
+# 3. Write Justfile with setup/clean/test/test-all
 # 4. Write <language>/.gitignore (language-specific artifacts)
-# 5. Update LANGUAGES variable in root Justfile
+# 5. Update LANGUAGES variable in root Justfile (ONE line!)
 # 6. Update README.md (5 locations)
-# 7. Test: just setup-all
+# 7. Test: just setup <language> && just clean-lang <language> && just test-lang <language>
 ```
 
 ### Task 2: Add a New Exercise
@@ -292,14 +411,13 @@ cd .. && just stats
 
 ### Task 3: Upgrade Dependencies
 
-**Per-language**:
+**Single language**:
 ```bash
-cd <language>
-nix flake update
-just test-all  # Verify no breakage
+just update <language>      # Update flake lock
+just test-lang <language>   # Verify no breakage
 ```
 
-**Global**:
+**All languages**:
 ```bash
 just update-all   # Update all languages
 just test-all     # Verify everything still works
@@ -312,25 +430,134 @@ just test-all     # Verify everything still works
 just languages
 
 # Verify environment builds
+just setup <language>
+
+# Run full verification
+just setup <language>
+just clean-lang <language>
+just test-lang <language>
+
+# Manual inspection (if needed)
 cd <language>
-nix develop --command echo "OK"
+ls -la flake.lock              # Check lock file exists
+nix develop --command echo "OK" # Test environment
+nix flake update               # Force update
+```
 
-# Check flake.lock exists
-ls -la flake.lock
+### Task 5: Document New Patterns
 
-# Rebuild environment
-nix flake update
-nix develop
+**Scenario**: User provides instruction that reveals a new pattern or convention.
+
+**Decision Tree**:
+
+```
+User instruction received
+    ↓
+Is it project-wide?
+    ↓ YES → Update root AGENTS.md
+    |       - Add to appropriate section (DO/DON'T, Anti-Patterns, etc.)
+    |       - Update examples if relevant
+    |       - Update verification checklist if it's a new requirement
+    |
+    ↓ NO → Is it language-specific?
+            ↓ YES → Update/Create <language>/AGENTS.md
+                    - Document the quirk
+                    - Explain why it's necessary
+                    - Provide examples
+```
+
+**Examples**:
+
+**Example 1: Global pattern**
+```
+User: "When adding a language, verify with single-language commands before running full setup-all"
+
+Action:
+1. Update "Verification Checklist" in root AGENTS.md
+2. Update "Task 1: Add a New Language" with new verification steps
+3. Update "Example: Adding Kotlin" to show the pattern
+```
+
+**Example 2: Language-specific quirk**
+```
+User: "Gradle daemon causes memory issues in CI, always use --no-daemon"
+
+Action:
+1. Create/Update kotlin/AGENTS.md:
+   ## Gradle Configuration
+   
+   **Critical**: Always use `--no-daemon` flag to prevent memory leaks in CI environments.
+   
+   ```justfile
+   test project:
+       gradle test --no-daemon
+   ```
+   
+   **Why**: Gradle daemon keeps JVM running, consuming memory even after tests complete.
+```
+
+**Example 3: Configuration change**
+```
+User: "Add single-language commands to global Justfile"
+
+Action:
+1. Implement the feature
+2. Update root AGENTS.md:
+   - "Testing Strategy" section (add single-language operations)
+   - "Quick Reference" section (add new commands)
+   - "Verification Checklist" (add verification steps)
+3. Update README.md:
+   - "Quick Start" section (add usage examples)
+   - "Global Project Management" (add command reference)
+```
+
+**Template for Language-Specific AGENTS.md**:
+
+```markdown
+# [Language] AI Agent Guide
+
+Language-specific rules and quirks for working with [Language] in this project.
+
+## Environment Setup
+
+[Any non-obvious setup steps]
+
+## Build System Quirks
+
+[Known issues with build tools]
+
+## Testing Patterns
+
+[Language-specific test conventions]
+
+## Common Issues
+
+### [Issue Name]
+
+**Problem**: [Description]
+**Solution**: [How to fix]
+**Example**: [Code snippet]
+
+## References
+
+- Upstream docs: [link]
+- Related root AGENTS.md sections: [links]
 ```
 
 ## File Naming Conventions
 
 ### Mandatory Files (per language)
 
-- `flake.nix` - Nix environment definition
-- `flake.lock` - Locked dependency versions
-- `Justfile` - Language-specific commands
+- `flake.nix` - Nix environment definition (or manual install docs for Swift-like cases)
+- `flake.lock` - Locked dependency versions (for Nix-managed languages)
+- `Justfile` - **MUST** implement: `setup`, `clean`, `test`, `test-all`
 - `.gitignore` - Language-specific build artifacts (NEVER add to root)
+
+### Optional Files (per language)
+
+- `AGENTS.md` - Language-specific guide for AI agents (create when needed)
+  - Use when: Language has unique quirks, non-obvious toolchain issues, or special conventions
+  - Don't use when: Language follows standard patterns already documented in root AGENTS.md
 
 ### Standard File Patterns
 
@@ -344,9 +571,11 @@ Before considering a change complete:
 
 - [ ] `just languages` shows the new language
 - [ ] `just stats` counts exercises correctly
-- [ ] `just setup-all` verifies all environments
+- [ ] `just setup <language>` verifies environment builds
+- [ ] `just test-lang <language>` passes (or shows expected failures)
+- [ ] `just clean-lang <language>` removes artifacts correctly
+- [ ] `just setup-all` verifies all environments still work
 - [ ] `just test-all` passes (or shows expected failures for incomplete exercises)
-- [ ] `just clean` removes all build artifacts
 - [ ] README.md updated in all 5 locations
 - [ ] No uncommitted generated files (run `just clean` first)
 
@@ -422,8 +651,8 @@ Check language's `Justfile`:
 
 ### Build Artifacts
 
-- Always add to `clean` command in root `Justfile`
-- Add to `<language>/.gitignore` (per-language, NOT root `.gitignore`)
+- Implement `clean` command in `<language>/Justfile` (global delegates automatically)
+- Add patterns to `<language>/.gitignore` (per-language, NOT root `.gitignore`)
 - Don't commit them
 
 ## Success Metrics
@@ -466,6 +695,13 @@ EOF
 
 # 3. Create Justfile
 cat > Justfile << 'EOF'
+setup:
+    @nix develop --command echo "Kotlin environment ready"
+
+clean:
+    @find . -type d -name "build" -exec rm -rf {} + 2>/dev/null || true
+    @find . -type d -name ".gradle" -exec rm -rf {} + 2>/dev/null || true
+
 test project:
     nix develop --command sh -c "cd {{project}} && gradle test --no-daemon"
 
@@ -510,20 +746,17 @@ EOF
 # 5. Update LANGUAGES in root Justfile
 # Change line 4 to:
 # LANGUAGES := "python racket ... rust elixir kotlin"
+# (No need to update clean command - automatic delegation!)
 
-# 6. Update clean command in root Justfile
-# Add after Elixir section:
-# # Kotlin
-# find kotlin -type d -name "build" -exec rm -rf {} + 2>/dev/null || true
-# find kotlin -type d -name ".gradle" -exec rm -rf {} + 2>/dev/null || true
-
-# 7. Update README.md
+# 6. Update README.md
 # Add to architecture, usage, tech stack, stats, upgrades
 
-# 8. Verify
+# 7. Verify
 cd ..
-just setup-all
-just languages  # Should show kotlin
+just setup kotlin       # Verify environment
+just clean-lang kotlin  # Verify cleanup
+just test-lang kotlin   # Verify tests
+just languages          # Should show kotlin
 ```
 
 ## Anti-Patterns to Avoid
@@ -553,6 +786,28 @@ test:
 test project:
     nix develop --command sh -c "cd {{project}} && cargo test"
 ```
+
+### ❌ Hardcoding cleanup rules in global Justfile
+
+```justfile
+# BAD - special cases for each language
+clean:
+    find python -type d -name "__pycache__" -exec rm -rf {} +
+    find rust -type d -name "target" -exec rm -rf {} +
+    find kotlin -type d -name "build" -exec rm -rf {} +
+    # ... 40+ lines of hardcoded patterns
+
+# GOOD - delegate to language modules
+clean:
+    for lang in {{LANGUAGES}}; do
+        (cd "$lang" && just clean) || true
+    done
+```
+
+**Why delegation is better**:
+- Add new language: 0 lines changed in global Justfile
+- Language owns its cleanup logic
+- No central bottleneck
 
 ### ❌ Duplicating LANGUAGES list
 
@@ -584,22 +839,32 @@ test-all:
 
 ### Most Common Commands
 
+**Global commands** (from root):
 ```bash
-just languages     # List all languages
-just stats         # Show exercise counts
-just test-all      # Run all tests
-just clean         # Remove build artifacts
-just setup-all     # Verify environments
+just languages           # List all languages
+just stats              # Show exercise counts
+just setup-all          # Setup all environments
+just test-all           # Run all tests
+just clean              # Remove all build artifacts
+just update-all         # Update all flake locks
 ```
 
-### Per-Language Commands
+**Single language commands** (from root):
+```bash
+just setup <language>        # Setup environment
+just test-lang <language>    # Test all projects
+just clean-lang <language>   # Clean artifacts
+just update <language>       # Update flake lock
+```
 
+**Per-project commands** (from language directory):
 ```bash
 cd <language>
+just setup             # Setup environment
 just test <project>    # Test one project
-just test-all          # Test all projects in language
-nix develop            # Enter development shell
-nix flake update       # Update dependencies
+just test-all          # Test all projects
+just clean             # Clean artifacts
+nix develop            # Enter development shell (Nix-managed only)
 ```
 
 ### Debugging
@@ -658,7 +923,12 @@ nix develop --command <language-command> --version
 2. Is the LANGUAGES variable updated?
 3. Do all global commands still work?
 4. Are tests passing?
-5. Is documentation updated?
+5. **Is documentation updated?**
+   - If general pattern: Update root AGENTS.md
+   - If language-specific: Update/create `<language>/AGENTS.md`
+   - If user-facing: Update README.md
+
+**Documentation is code**: Stale docs are worse than no docs. Every change that introduces a new pattern or convention MUST be documented.
 
 ### Communication with User
 
@@ -667,8 +937,23 @@ When suggesting changes:
 - Show the data structure impact
 - Verify with tests
 - Be direct about tradeoffs
+- **Document the pattern** (add to AGENTS.md if generalizable)
 
 ## Success Stories
+
+### Documentation-driven evolution
+
+**Problem**: AI agents forget patterns between sessions, leading to inconsistent implementations.
+
+**Solution**: Self-documenting codebase with living AGENTS.md files.
+
+**Result**: 
+- New patterns captured immediately
+- Language quirks documented at source
+- Zero knowledge loss between sessions
+- AI agents learn from past decisions
+
+**Lesson**: Documentation is not overhead—it's **knowledge infrastructure**. When documentation evolves with code, it becomes a force multiplier.
 
 ### WASM npm workspaces
 
@@ -704,11 +989,24 @@ When suggesting changes:
 
 This project demonstrates that **good architecture scales effortlessly**:
 
-- Started with 1 language → Now 11 languages
+- Started with 1 language → Now 14 languages (13 Nix + 1 manual)
 - Complexity remained **linear** (not exponential)
-- Adding language #12 takes same effort as adding language #2
+- Adding language #15 takes same effort as adding language #2
 
 **The data structure does the work. The code just follows the structure.**
 
 That's "good taste" in action.
+
+### Three Pillars of Scalability
+
+1. **Data structures**: LANGUAGES variable controls everything
+2. **Delegation**: Each module manages its own concerns (setup/clean/test)
+3. **Documentation**: Patterns captured at source, never forgotten
+
+**When all three work together**, you get a system that:
+- Scales to any number of languages
+- Maintains itself through documentation
+- Improves with every change
+
+**This AGENTS.md file is a living document**. It should grow smarter with every user instruction. Treat documentation as infrastructure, not afterthought.
 

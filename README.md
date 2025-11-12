@@ -54,23 +54,28 @@ experimental-features = nix-command flakes
 ### Global Commands (from root directory)
 
 ```bash
-# Test all projects in all languages
-just test-all
-
-# Setup all development environments
-just setup-all
-
-# Update all flake locks
-just update-all
-
-# Clean all build artifacts
-just clean
+# List all supported languages
+just languages
 
 # Show project statistics
 just stats
 
-# Test specific language
-just test-lang python
+# Operations on all languages
+just setup-all          # Setup all environments
+just test-all           # Test all projects
+just clean              # Clean all artifacts
+just update-all         # Update all flake locks
+
+# Operations on specific language
+just setup <language>       # Setup environment
+just test-lang <language>   # Test all projects
+just clean-lang <language>  # Clean artifacts
+just update <language>      # Update flake lock
+
+# Examples
+just setup python           # Setup Python environment
+just test-lang rust         # Test all Rust projects
+just clean-lang kotlin      # Clean Kotlin artifacts
 ```
 
 ### Per-Language Pattern
@@ -253,14 +258,22 @@ The root `Justfile` provides commands to manage all languages as a whole:
 
 ### Available Commands
 
+**Global operations**:
 ```bash
-just languages     # List all supported languages
-just test-all      # Run all tests in all languages
-just setup-all     # Verify all environments
-just update-all    # Update all flake locks
-just clean         # Remove all build artifacts
-just stats         # Show exercise counts per language
-just test-lang <lang>  # Test all exercises in specific language
+just languages           # List all supported languages
+just stats              # Show exercise counts per language
+just setup-all          # Setup all environments
+just test-all           # Run all tests in all languages
+just clean              # Remove all build artifacts
+just update-all         # Update all flake locks
+```
+
+**Single language operations**:
+```bash
+just setup <language>        # Setup specific environment
+just test-lang <language>    # Test all exercises in language
+just clean-lang <language>   # Clean language artifacts
+just update <language>       # Update language flake lock
 ```
 
 ### Example Workflow
@@ -269,16 +282,25 @@ just test-lang <lang>  # Test all exercises in specific language
 # Initial setup
 just setup-all
 
-# Work on exercises
-cd python && just test leap
-cd racket && just test knapsack
+# Work on specific language
+just setup python           # Setup Python environment
+cd python && just test leap # Test one exercise
+
+# Quick verification of one language
+just test-lang python       # Test all Python exercises
+just clean-lang python      # Clean Python artifacts
+
+# Work on another language
+just setup rust
+cd rust && just test hello-world
 
 # Before committing
 just test-all      # Verify everything works
 just clean         # Remove temporary files
 
 # Update dependencies
-just update-all
+just update python  # Update single language
+just update-all     # Update all languages
 ```
 
 ## Development Philosophy

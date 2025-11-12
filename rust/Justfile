@@ -1,3 +1,10 @@
+setup:
+    @nix develop --command echo "Rust environment ready"
+
+clean:
+    @find . -type d -name "target" -exec rm -rf {} + 2>/dev/null || true
+    @find . -name "Cargo.lock" -type f -delete 2>/dev/null || true
+
 test project:
     nix develop --command sh -c "cd {{project}} && cargo test"
 

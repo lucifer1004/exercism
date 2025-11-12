@@ -1,6 +1,10 @@
 setup:
     nix develop --command sh -c "npm install"
 
+clean:
+    @rm -rf node_modules package-lock.json 2>/dev/null || true
+    @find . -name "node_modules" -type d -exec rm -rf {} + 2>/dev/null || true
+
 test project: setup
     nix develop --command sh -c "cd {{project}} && npm test"
 

@@ -1,0 +1,21 @@
+setup:
+    @nix develop --command echo "Crystal environment ready"
+
+clean:
+    @find . -type d -name ".crystal" -exec rm -rf {} + 2>/dev/null || true
+    @find . -type d -name "lib" -exec rm -rf {} + 2>/dev/null || true
+    @find . -name "shard.lock" -type f -delete 2>/dev/null || true
+
+test project:
+    nix develop --command sh -c "cd {{project}} && crystal spec"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/spec" ] || ls "$dir"/*_spec.cr &>/dev/null; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && crystal spec"
+        fi
+    done
+

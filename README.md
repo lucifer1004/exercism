@@ -22,6 +22,7 @@ exercism/
 ├── rust/        # Rust + Cargo + rust-analyzer
 ├── elixir/      # Elixir + Mix + ElixirLS
 ├── kotlin/      # Kotlin + Gradle + kotlin-language-server
+├── crystal/     # Crystal + Crystalline
 └── swift/       # Swift (manual installation required)
 ```
 
@@ -211,6 +212,14 @@ just test hello-world    # Run specific exercise
 # or: cd hello-world && gradle test --no-daemon
 ```
 
+#### Crystal
+```bash
+cd crystal
+nix develop
+just test hello-world    # Run specific exercise
+# or: cd hello-world && crystal spec
+```
+
 #### Swift
 
 **Note**: Swift requires manual installation. See [swift/README.md](swift/README.md) for setup instructions.
@@ -239,11 +248,12 @@ just test hello-world    # Run specific exercise
 | Rust     | Cargo + Clippy | Built-in | rust-analyzer |
 | Elixir   | Elixir + Mix | ExUnit | ElixirLS |
 | Kotlin   | Gradle + JDK 21 | JUnit | kotlin-language-server |
+| Crystal  | Crystal + Shards | Crystal Spec | Crystalline |
 | Swift    | Swift Package Manager (manual) | XCTest | - |
 
 ## Project Statistics
 
-- **Languages**: 14 (13 Nix-managed + 1 manual)
+- **Languages**: 15 (14 Nix-managed + 1 manual)
 - **Exercises**: 21+ (run `just stats` for breakdown)
 - **Lines of Config**: ~600
 - **Space Saved (WASM)**: 220MB via npm workspaces
@@ -372,6 +382,9 @@ This project follows **Linus Torvalds' "good taste" principles**:
 
 **Kotlin**:
 - ✅ Added Kotlin environment with JDK 21, Gradle, and kotlin-language-server
+
+**Crystal**:
+- ✅ Added Crystal environment with Crystalline language server
 
 ## Contributing
 

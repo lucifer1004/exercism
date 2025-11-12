@@ -26,6 +26,36 @@ language/
 
 **Critical**: Each language is **completely isolated**. No shared dependencies, no global state.
 
+## Version Control
+
+**This project uses Jujutsu (jj), not Git.**
+
+### Nix Flake Compatibility
+
+Nix requires files to be tracked by version control before evaluating flakes. When you see errors like:
+
+```
+error: Path 'crystal/flake.nix' in the repository is not tracked by Git.
+```
+
+**Solution**: Use `jj st` to refresh Jujutsu's working copy state:
+
+```bash
+cd /path/to/exercism
+jj st  # Refreshes jj state, Nix will recognize tracked files
+nix flake lock  # Now works
+```
+
+**Why this works**: Jujutsu automatically tracks all files in the working copy. Running `jj st` updates the internal state that Nix reads to determine tracked files.
+
+**Do NOT use `git add`** - this project doesn't use Git for version control.
+
+### Key Differences from Git
+
+- **No explicit staging**: Jujutsu tracks changes automatically
+- **No `git add` needed**: All new files are tracked by default
+- **Refresh with `jj st`**: Updates state for tools like Nix that check VCS status
+
 ## Documentation Maintenance
 
 **Critical Principle**: Documentation must evolve with code. Stale docs are worse than no docs.
@@ -581,15 +611,24 @@ Before considering a change complete:
 
 ## Troubleshooting
 
-### "Path not tracked by Git" error
+### "Path not tracked by Git/VCS" error
 
-When running `nix flake lock`:
-```bash
-git add <language>/flake.nix <language>/Justfile
-nix flake lock
+**This project uses Jujutsu (jj), not Git.**
+
+When running `nix flake lock`, you might see:
+```
+error: Path 'language/flake.nix' is not tracked by Git
 ```
 
-Nix requires files to be tracked before evaluating flakes.
+**Solution** - Refresh Jujutsu state:
+```bash
+jj st  # Refresh working copy state
+nix flake lock  # Now works
+```
+
+**Why**: Nix checks VCS status before evaluating flakes. Jujutsu automatically tracks files, but `jj st` updates the state Nix reads.
+
+**Do NOT** use `git add` - this project uses Jujutsu for version control.
 
 ### Language not showing in `just languages`
 

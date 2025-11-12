@@ -1,0 +1,14 @@
+# Crystal build artifacts
+.crystal/
+lib/
+shard.lock
+
+# Compiled binaries
+*.dwarf
+
+# Documentation
+docs/
+
+# Dependencies
+/shard.yml.lock
+

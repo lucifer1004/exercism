@@ -1,7 +1,7 @@
 # Root Justfile - Manage all language projects
 
 # Centralized list of all supported languages
-LANGUAGES := "python racket zig ocaml clojure wasm mips julia go haskell"
+LANGUAGES := "python racket zig ocaml clojure wasm mips julia go haskell rust"
 
 # List all available commands
 default:
@@ -98,6 +98,10 @@ clean:
     
     # Julia
     find julia -type d -name ".julia" -exec rm -rf {} + 2>/dev/null || true
+    
+    # Rust
+    find rust -type d -name "target" -exec rm -rf {} + 2>/dev/null || true
+    find rust -name "Cargo.lock" -type f -delete 2>/dev/null || true
     
     echo "✅ Cleanup complete!"
 

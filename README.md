@@ -18,7 +18,8 @@ exercism/
 ├── mips/        # Java + MARS simulator
 ├── julia/       # Julia 1.12
 ├── go/          # Go + gopls
-└── haskell/     # GHC + Stack + HLS
+├── haskell/     # GHC + Stack + HLS
+└── rust/        # Rust + Cargo + rust-analyzer
 ```
 
 ### Design Principles
@@ -171,6 +172,14 @@ just test hello-world    # Run specific exercise
 # or: cd hello-world && stack test
 ```
 
+#### Rust
+```bash
+cd rust
+nix develop
+just test hello-world    # Run specific exercise
+# or: cd hello-world && cargo test
+```
+
 ## Technology Stack
 
 | Language | Toolchain | Test Framework | Language Server |
@@ -185,11 +194,12 @@ just test hello-world    # Run specific exercise
 | Julia    | Julia 1.12 | Test stdlib | LanguageServer.jl |
 | Go       | Go + gotools | testing | gopls |
 | Haskell  | GHC + Stack | hspec/HUnit | HLS |
+| Rust     | Cargo + Clippy | Built-in | rust-analyzer |
 
 ## Project Statistics
 
-- **Languages**: 10
-- **Exercises**: 21 (run `just stats` for breakdown)
+- **Languages**: 11
+- **Exercises**: 21+ (run `just stats` for breakdown)
 - **Lines of Config**: ~800
 - **Space Saved (WASM)**: 220MB via npm workspaces
 - **Global Commands**: 7 (`just --list` to see all)
@@ -281,6 +291,9 @@ This project follows **Linus Torvalds' "good taste" principles**:
 
 **Haskell**:
 - ✅ Added Haskell environment with GHC, Stack, and HLS
+
+**Rust**:
+- ✅ Added Rust environment with Cargo, Clippy, and rust-analyzer
 
 ## Contributing
 

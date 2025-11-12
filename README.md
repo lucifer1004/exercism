@@ -17,7 +17,8 @@ exercism/
 ├── wasm/        # Node.js 24 + Jest 30 (npm workspaces)
 ├── mips/        # Java + MARS simulator
 ├── julia/       # Julia 1.12
-└── go/          # Go + gopls
+├── go/          # Go + gopls
+└── haskell/     # GHC + Stack + HLS
 ```
 
 ### Design Principles
@@ -162,6 +163,14 @@ just test hello-world    # Run specific exercise
 # or: cd hello-world && go test
 ```
 
+#### Haskell
+```bash
+cd haskell
+nix develop
+just test hello-world    # Run specific exercise
+# or: cd hello-world && stack test
+```
+
 ## Technology Stack
 
 | Language | Toolchain | Test Framework | Language Server |
@@ -175,11 +184,12 @@ just test hello-world    # Run specific exercise
 | MIPS     | Java + MARS | MARS | - |
 | Julia    | Julia 1.12 | Test stdlib | LanguageServer.jl |
 | Go       | Go + gotools | testing | gopls |
+| Haskell  | GHC + Stack | hspec/HUnit | HLS |
 
 ## Project Statistics
 
-- **Languages**: 9
-- **Exercises**: 20 (run `just stats` for breakdown)
+- **Languages**: 10
+- **Exercises**: 21 (run `just stats` for breakdown)
 - **Lines of Config**: ~800
 - **Space Saved (WASM)**: 220MB via npm workspaces
 - **Global Commands**: 7 (`just --list` to see all)
@@ -268,6 +278,9 @@ This project follows **Linus Torvalds' "good taste" principles**:
 
 **Go**:
 - ✅ Added Go environment with gopls and gotools
+
+**Haskell**:
+- ✅ Added Haskell environment with GHC, Stack, and HLS
 
 ## Contributing
 

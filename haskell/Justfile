@@ -1,0 +1,13 @@
+test project:
+    nix develop --command sh -c "cd {{project}} && stack test"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/stack.yaml" ] || [ -f "$dir/package.yaml" ]; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && stack test"
+        fi
+    done
+

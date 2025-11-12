@@ -1,7 +1,7 @@
 # Root Justfile - Manage all language projects
 
 # Centralized list of all supported languages
-LANGUAGES := "python racket zig ocaml clojure wasm mips julia go"
+LANGUAGES := "python racket zig ocaml clojure wasm mips julia go haskell"
 
 # List all available commands
 default:
@@ -88,6 +88,16 @@ clean:
     
     # MIPS
     rm -f mips/mars.jar 2>/dev/null || true
+    
+    # Haskell
+    find haskell -type d -name ".stack-work" -exec rm -rf {} + 2>/dev/null || true
+    find haskell -type d -name "dist-newstyle" -exec rm -rf {} + 2>/dev/null || true
+    
+    # Go
+    find go -name "go.sum" -type f -delete 2>/dev/null || true
+    
+    # Julia
+    find julia -type d -name ".julia" -exec rm -rf {} + 2>/dev/null || true
     
     echo "✅ Cleanup complete!"
 

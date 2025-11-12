@@ -297,6 +297,8 @@ This project follows **Linus Torvalds' "good taste" principles**:
 
 ## Contributing
 
+> **For AI Agents**: See [AGENTS.md](AGENTS.md) for detailed development guidelines, architecture decisions, and common patterns.
+
 ### Adding a New Exercise
 
 Each language environment is self-contained. To add a new exercise:

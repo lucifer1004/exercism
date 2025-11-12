@@ -105,16 +105,24 @@ test-all:
     done
 ```
 
-4. **Update `Justfile` line 4**: Add language to `LANGUAGES` variable
+4. **Create `<language>/.gitignore`**: Language-specific build artifacts
+   ```gitignore
+   # <Language> build artifacts
+   <build-dir>/
+   <cache-dir>/
+   # Language-specific patterns
+   ```
+   **CRITICAL**: Never add language-specific patterns to root `.gitignore`.
+   Root `.gitignore` is ONLY for universal patterns (editor, Nix, direnv).
 
-5. **Update `README.md`**:
+5. **Update `Justfile` line 4**: Add language to `LANGUAGES` variable
+
+6. **Update `README.md`**:
    - Add to architecture diagram (line ~10)
    - Add usage example (line ~80)
    - Add to technology stack table (line ~185)
    - Increment language count (line ~201)
    - Add to recent upgrades (line ~295)
-
-6. **Add to `.gitignore`** if needed for language-specific artifacts
 
 7. **Test**: `just setup-all` to verify the environment
 
@@ -158,6 +166,8 @@ find <language> -name "<lock-file>" -type f -delete 2>/dev/null || true
 - Clojure: `target/`
 - WASM: `node_modules/`
 - Julia: `.julia/`
+- Kotlin: `build/`, `.gradle/`
+- Elixir: `_build/`, `deps/`, `*.beam`
 
 ## Language-Specific Patterns
 
@@ -176,6 +186,8 @@ find <language> -name "<lock-file>" -type f -delete 2>/dev/null || true
 | Clojure | `lein test` | `project.clj` |
 | MIPS | `java -jar ../mars.jar nc runner.mips impl.mips` | `runner.mips` |
 | WASM | `npm test` | `package.json` |
+| Kotlin | `gradle test --no-daemon` | `build.gradle.kts` or `build.gradle` |
+| Elixir | `mix test` | `mix.exs` |
 
 ### Language Server Packages (for LSP support)
 
@@ -190,6 +202,8 @@ find <language> -name "<lock-file>" -type f -delete 2>/dev/null || true
 | Clojure | Install via `clojure-lsp` | Via Clojure ecosystem |
 | Racket | Install via `raco` | racket-langserver |
 | Julia | Install via Julia pkg | LanguageServer.jl |
+| Kotlin | `kotlin-language-server` | Kotlin LSP |
+| Elixir | `elixir-ls` | ElixirLS |
 
 ## Special Cases
 
@@ -232,6 +246,7 @@ test project: setup
 ✅ **Use the LANGUAGES variable**: Single source of truth
 ✅ **Include language server**: Essential for good DX
 ✅ **Add test-all to language Justfile**: For batch testing
+✅ **Create `<language>/.gitignore`**: Each language manages its own build artifacts
 ✅ **Update all 3 files**: Justfile (line 4), README.md, language's own files
 ✅ **Test before committing**: `just test-all`
 ✅ **Clean build artifacts**: Add to `clean` command
@@ -243,6 +258,7 @@ test project: setup
 ❌ **Don't skip the LANGUAGES variable**: All commands depend on it
 ❌ **Don't add global dependencies**: Each language manages its own
 ❌ **Don't mix language concerns**: Python code in Rust directory, etc.
+❌ **Don't add language-specific patterns to root `.gitignore`**: Use `<language>/.gitignore` instead
 ❌ **Don't commit build artifacts**: Use `just clean` first
 
 ## Common Tasks for AI Agents
@@ -254,9 +270,10 @@ test project: setup
 mkdir <language>
 # 2. Write flake.nix (use template above)
 # 3. Write Justfile (use template above)
-# 4. Update LANGUAGES variable in root Justfile
-# 5. Update README.md (5 locations)
-# 6. Test: just setup-all
+# 4. Write <language>/.gitignore (language-specific artifacts)
+# 5. Update LANGUAGES variable in root Justfile
+# 6. Update README.md (5 locations)
+# 7. Test: just setup-all
 ```
 
 ### Task 2: Add a New Exercise
@@ -313,6 +330,7 @@ nix develop
 - `flake.nix` - Nix environment definition
 - `flake.lock` - Locked dependency versions
 - `Justfile` - Language-specific commands
+- `.gitignore` - Language-specific build artifacts (NEVER add to root)
 
 ### Standard File Patterns
 
@@ -404,8 +422,8 @@ Check language's `Justfile`:
 
 ### Build Artifacts
 
-- Always add to `clean` command
-- Add to `.gitignore`
+- Always add to `clean` command in root `Justfile`
+- Add to `<language>/.gitignore` (per-language, NOT root `.gitignore`)
 - Don't commit them
 
 ## Success Metrics
@@ -419,25 +437,27 @@ A well-integrated language should:
 5. **Be clean**: `just clean` removes all artifacts
 6. **Be discoverable**: Shows in `just languages` and `just stats`
 
-## Example: Adding TypeScript
+## Example: Adding Kotlin
 
 ```bash
 # 1. Create structure
-mkdir typescript
-cd typescript
+mkdir kotlin
+cd kotlin
 
 # 2. Create flake.nix
 cat > flake.nix << 'EOF'
 {
-  description = "TypeScript environment for Exercism";
+  description = "Kotlin environment for Exercism";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   outputs = { self, nixpkgs }:
     let pkgs = import nixpkgs { system = "x86_64-linux"; };
     in {
       devShells.x86_64-linux.default = pkgs.mkShell {
         buildInputs = [
-          pkgs.nodejs_24
-          pkgs.typescript
+          pkgs.jdk21
+          pkgs.kotlin
+          pkgs.gradle
+          pkgs.kotlin-language-server
         ];
       };
     };
@@ -447,20 +467,63 @@ EOF
 # 3. Create Justfile
 cat > Justfile << 'EOF'
 test project:
-    nix develop --command sh -c "cd {{project}} && npm test"
+    nix develop --command sh -c "cd {{project}} && gradle test --no-daemon"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/build.gradle.kts" ] || [ -f "$dir/build.gradle" ]; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && gradle test --no-daemon"
+        fi
+    done
 EOF
 
-# 4. Update LANGUAGES in root Justfile
-# Change line 4 to:
-# LANGUAGES := "python racket ... rust typescript"
+# 4. Create .gitignore
+cat > .gitignore << 'EOF'
+# Gradle build artifacts
+build/
+.gradle/
+gradle.properties
 
-# 5. Update README.md
+# Kotlin compiled files
+*.class
+*.jar
+*.war
+*.ear
+
+# Local configuration
+local.properties
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Kotlin specific
+.kotlin/
+EOF
+
+# 5. Update LANGUAGES in root Justfile
+# Change line 4 to:
+# LANGUAGES := "python racket ... rust elixir kotlin"
+
+# 6. Update clean command in root Justfile
+# Add after Elixir section:
+# # Kotlin
+# find kotlin -type d -name "build" -exec rm -rf {} + 2>/dev/null || true
+# find kotlin -type d -name ".gradle" -exec rm -rf {} + 2>/dev/null || true
+
+# 7. Update README.md
 # Add to architecture, usage, tech stack, stats, upgrades
 
-# 6. Verify
+# 8. Verify
 cd ..
 just setup-all
-just languages  # Should show typescript
+just languages  # Should show kotlin
 ```
 
 ## Anti-Patterns to Avoid

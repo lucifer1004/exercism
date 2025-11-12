@@ -1,0 +1,13 @@
+test project:
+    nix develop --command sh -c "cd {{project}} && gradle test --no-daemon"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/build.gradle.kts" ] || [ -f "$dir/build.gradle" ]; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && gradle test --no-daemon"
+        fi
+    done
+

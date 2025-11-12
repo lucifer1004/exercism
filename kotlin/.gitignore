@@ -1,0 +1,24 @@
+# Gradle build artifacts
+build/
+.gradle/
+gradle.properties
+
+# Kotlin compiled files
+*.class
+*.jar
+*.war
+*.ear
+
+# Local configuration
+local.properties
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Kotlin specific
+.kotlin/
+

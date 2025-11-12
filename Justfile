@@ -1,7 +1,7 @@
 # Root Justfile - Manage all language projects
 
 # Centralized list of all supported languages
-LANGUAGES := "python racket zig ocaml clojure wasm mips julia go haskell rust elixir"
+LANGUAGES := "python racket zig ocaml clojure wasm mips julia go haskell rust elixir kotlin"
 MANUAL_LANGUAGES := "swift"  # Languages that require manual installation
 
 # List all available commands
@@ -115,6 +115,10 @@ clean:
     find elixir -type d -name "_build" -exec rm -rf {} + 2>/dev/null || true
     find elixir -type d -name "deps" -exec rm -rf {} + 2>/dev/null || true
     find elixir -name "*.beam" -type f -delete 2>/dev/null || true
+    
+    # Kotlin
+    find kotlin -type d -name "build" -exec rm -rf {} + 2>/dev/null || true
+    find kotlin -type d -name ".gradle" -exec rm -rf {} + 2>/dev/null || true
     
     echo "✅ Cleanup complete!"
 

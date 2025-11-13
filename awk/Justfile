@@ -1,0 +1,19 @@
+setup:
+    @nix develop --command echo "AWK environment ready"
+
+clean:
+    @echo "No build artifacts to clean for AWK"
+
+test project:
+    nix develop --command sh -c "cd {{project}} && bats test-*.bats"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if ls "$dir"/test-*.bats >/dev/null 2>&1; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && bats test-*.bats"
+        fi
+    done
+

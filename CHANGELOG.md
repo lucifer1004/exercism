@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **AWK**: Added AWK environment (GNU AWK with Bats testing framework)
+  - 1 exercise: hello-world
 - **Raku**: Added Raku environment (Rakudo)
   - 2 exercises: hello-world, leap
 - **Nim**: Added Nim environment (Nim 2.2)

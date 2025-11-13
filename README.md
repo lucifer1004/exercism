@@ -13,6 +13,7 @@ exercism/
 ├── racket/      # Racket
 ├── raku/        # Raku (Perl 6)
 ├── nim/         # Nim
+├── awk/         # GNU AWK + Bats
 ├── zig/         # Zig + ZLS
 ├── ocaml/       # OCaml + Dune + LSP
 ├── clojure/     # Clojure + Leiningen
@@ -97,7 +98,7 @@ cd <project> && <test-command>
 
 ### Language-Specific Usage
 
-#### Standard Pattern (Python, Racket, Raku, Nim, Zig, OCaml, Clojure, Julia, Go, Haskell, Rust, Elixir, Kotlin, Crystal)
+#### Standard Pattern (Python, Racket, Raku, Nim, AWK, Zig, OCaml, Clojure, Julia, Go, Haskell, Rust, Elixir, Kotlin, Crystal)
 
 Most languages follow the same workflow:
 
@@ -117,6 +118,7 @@ just test knapsack     # Racket
 - **Racket**: `cd <project> && raco test .`
 - **Raku**: `cd <project> && raku t/*.rakutest`
 - **Nim**: `cd <project> && nim c -r test_*.nim`
+- **AWK**: `cd <project> && bats test-*.bats`
 - **Zig**: `cd <project> && zig test test_*.zig`
 - **OCaml**: `cd <project> && dune test`
 - **Clojure**: `cd <project> && lein test`
@@ -179,6 +181,7 @@ just test hello-world
 | Racket   | Racket | rackunit | racket-langserver |
 | Raku     | Rakudo | Built-in Test | - |
 | Nim      | Nim 2.2 | unittest | nimlangserver |
+| AWK      | GNU AWK (gawk) | Bats | - |
 | Zig      | Zig | Built-in | ZLS |
 | OCaml    | OCaml + Dune | OUnit2 | ocaml-lsp |
 | Clojure  | Clojure + Leiningen | clojure.test | clojure-lsp |
@@ -195,8 +198,8 @@ just test hello-world
 
 ## Project Statistics
 
-- **Languages**: 17 (16 Nix-managed + 1 manual)
-- **Exercises**: 29+ (run `just stats` for breakdown)
+- **Languages**: 18 (17 Nix-managed + 1 manual)
+- **Exercises**: 31 (run `just stats` for breakdown)
 - **Lines of Config**: ~700
 - **Space Saved (WASM)**: 220MB via npm workspaces
 - **Global Commands**: 7 (`just --list` to see all)

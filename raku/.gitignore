@@ -1,0 +1,5 @@
+# Raku build artifacts
+.precomp/
+*.moarvm
+
+

@@ -1,0 +1,19 @@
+setup:
+    @nix develop --command echo "Raku environment ready"
+
+clean:
+    @echo "Raku: no build artifacts to clean"
+
+test project:
+    nix develop --command sh -c "cd {{project}} && raku t/*.rakutest"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if ls "$dir"/t/*.rakutest >/dev/null 2>&1; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && raku t/*.rakutest"
+        fi
+    done
+

@@ -11,6 +11,8 @@ exercism/
 ├── Justfile     # Global project management
 ├── python/      # Python 3.14 + pytest
 ├── racket/      # Racket
+├── raku/        # Raku (Perl 6)
+├── nim/         # Nim
 ├── zig/         # Zig + ZLS
 ├── ocaml/       # OCaml + Dune + LSP
 ├── clojure/     # Clojure + Leiningen
@@ -95,7 +97,7 @@ cd <project> && <test-command>
 
 ### Language-Specific Usage
 
-#### Standard Pattern (Python, Racket, Zig, OCaml, Clojure, Julia, Go, Haskell, Rust, Elixir, Kotlin, Crystal)
+#### Standard Pattern (Python, Racket, Raku, Nim, Zig, OCaml, Clojure, Julia, Go, Haskell, Rust, Elixir, Kotlin, Crystal)
 
 Most languages follow the same workflow:
 
@@ -105,14 +107,16 @@ nix develop
 just test <project>    # Run specific exercise
 
 # Examples:
-just test leap         # Python/OCaml/Clojure
-just test hello-world  # Rust/Go/Haskell/Zig/Kotlin/Crystal/Elixir
+just test leap         # Python/OCaml/Clojure/Raku
+just test hello-world  # Rust/Go/Haskell/Zig/Kotlin/Crystal/Elixir/Nim/Raku
 just test knapsack     # Racket
 ```
 
 **Manual commands** (if you prefer not using `just`):
 - **Python**: `cd <project> && pytest`
 - **Racket**: `cd <project> && raco test .`
+- **Raku**: `cd <project> && raku t/*.rakutest`
+- **Nim**: `cd <project> && nim c -r test_*.nim`
 - **Zig**: `cd <project> && zig test test_*.zig`
 - **OCaml**: `cd <project> && dune test`
 - **Clojure**: `cd <project> && lein test`
@@ -173,6 +177,8 @@ just test hello-world
 |----------|-----------|----------------|-----------------|
 | Python   | Python 3.14 | pytest | Built-in |
 | Racket   | Racket | rackunit | racket-langserver |
+| Raku     | Rakudo | Built-in Test | - |
+| Nim      | Nim 2.2 | unittest | nimlangserver |
 | Zig      | Zig | Built-in | ZLS |
 | OCaml    | OCaml + Dune | OUnit2 | ocaml-lsp |
 | Clojure  | Clojure + Leiningen | clojure.test | clojure-lsp |
@@ -189,9 +195,9 @@ just test hello-world
 
 ## Project Statistics
 
-- **Languages**: 15 (14 Nix-managed + 1 manual)
-- **Exercises**: 21+ (run `just stats` for breakdown)
-- **Lines of Config**: ~600
+- **Languages**: 17 (16 Nix-managed + 1 manual)
+- **Exercises**: 29+ (run `just stats` for breakdown)
+- **Lines of Config**: ~700
 - **Space Saved (WASM)**: 220MB via npm workspaces
 - **Global Commands**: 7 (`just --list` to see all)
 - **Centralized Management**: All languages defined in one place (run `just languages`)
@@ -277,50 +283,9 @@ This project follows **Linus Torvalds' "good taste" principles**:
 - Pragmatic solution: require manual installation
 - **"Talk is cheap. Show me the code."** - Working solution > theoretical purity
 
-## Recent Upgrades
+## Changelog
 
-### November 2025 - Major Refactoring
-
-**Architecture**:
-- ✅ Migrated from monolithic to per-language flakes
-- ✅ Added global project management (root `Justfile`)
-- ✅ Isolated all 8 languages into independent environments
-
-**WASM**:
-- ✅ Jest 29 → 30
-- ✅ ESLint 8 → 9 (flat config migration)
-- ✅ npm workspaces (67% space reduction: 330MB → 110MB)
-- ✅ @types/node 20 → 24
-- ✅ All tests passing
-
-**Python**:
-- ✅ Python 3.11 → 3.14
-
-**Julia**:
-- ✅ Added Julia environment (Julia 1.12.1)
-
-**Go**:
-- ✅ Added Go environment with gopls and gotools
-
-**Haskell**:
-- ✅ Added Haskell environment with GHC, Stack, and HLS
-
-**Rust**:
-- ✅ Added Rust environment with Cargo, Clippy, and rust-analyzer
-
-**Swift**:
-- ✅ Added Swift support (requires manual installation)
-- 📝 Pragmatic decision: Swift toolchain doesn't integrate cleanly with Nix on Linux
-- 📖 See swift/README.md for installation guide
-
-**Elixir**:
-- ✅ Added Elixir environment with Mix and ElixirLS
-
-**Kotlin**:
-- ✅ Added Kotlin environment with JDK 21, Gradle, and kotlin-language-server
-
-**Crystal**:
-- ✅ Added Crystal environment with Crystalline language server
+See [CHANGELOG.md](CHANGELOG.md) for detailed project history and recent updates.
 
 ## Contributing
 
@@ -370,12 +335,13 @@ To add support for a new language:
 
 5. **Run `nix flake lock`** in the language directory
 
-6. **Update `README.md`**:
-   - Add to architecture diagram
-   - Add usage example
-   - Add to technology stack table
+6. **Update documentation**:
+   - **README.md**: Add to architecture diagram, usage example, technology stack table, statistics
+   - **CHANGELOG.md**: Add entry in "Unreleased" section
 
 The centralized `LANGUAGES` variable ensures consistency across all global commands.
+
+> **Note**: For detailed guidelines, see [AGENTS.md](AGENTS.md).
 
 ## License
 

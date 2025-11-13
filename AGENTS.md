@@ -295,15 +295,24 @@ mkdir <language>
 # 3. Write Justfile with setup/clean/test/test-all
 # 4. Write <language>/.gitignore (language-specific artifacts)
 # 5. Update LANGUAGES variable in root Justfile (ONE line!)
-# 6. Update README.md:
-#    - Add to architecture diagram (line ~10)
-#    - Add language name to "Standard Pattern" parentheses (line ~98) - UNLESS it's a special case
-#    - If special case: add new subsection under "Special Cases" with explanation
-#    - Add to technology stack table (line ~171)
-#    - Increment language count (line ~192)
-#    - Add to recent upgrades (line ~331)
+# 6. Update documentation (CRITICAL - 6 locations):
+#    a) README.md - Architecture diagram (~line 10): Add <language>/ directory with description
+#    b) README.md - Standard Pattern list (~line 100): Add language name to parentheses
+#       - If special case: create new subsection under "Special Cases" instead
+#    c) README.md - Manual commands (~line 115-130): Add test command for the language
+#    d) README.md - Technology Stack table (~line 176): Add row with toolchain/test framework/LSP
+#    e) README.md - Project Statistics (~line 196-199): Update language count and exercise count
+#    f) CHANGELOG.md - Add entry in "Unreleased" section documenting the addition
 # 7. Test: just setup <language> && just clean-lang <language> && just test-lang <language>
 ```
+
+**CRITICAL**: Step 6 is NOT optional. Documentation must be updated whenever adding a language.
+Forgetting documentation creates confusion for users and future AI agents.
+
+**Documentation structure**:
+- README.md: User-facing overview (architecture, usage, tech stack, statistics)
+- CHANGELOG.md: Historical record of all changes (follows Keep a Changelog format)
+- AGENTS.md: AI agent guidelines (patterns, workflows, success stories)
 
 ### Task 2: Add a New Exercise
 
@@ -469,6 +478,15 @@ Language-specific rules and quirks for working with [Language] in this project.
   - Use when: Language has unique quirks, non-obvious toolchain issues, or special conventions
   - Don't use when: Language follows standard patterns already documented in root AGENTS.md
 
+### Project-Level Documentation Files
+
+- **README.md** - User-facing overview (architecture, quick start, usage patterns, tech stack)
+- **CHANGELOG.md** - Historical record following [Keep a Changelog](https://keepachangelog.com/) format
+  - Categories: Added, Changed, Deprecated, Removed, Fixed, Security
+  - Use "Unreleased" section for ongoing work
+  - When adding a language: add entry under "Unreleased → Added"
+- **AGENTS.md** - AI agent guidelines (this file)
+
 ### Standard File Patterns
 
 - Test files: Language-specific (`*_test.py`, `*_test.go`, `test_*.zig`, etc.)
@@ -486,7 +504,9 @@ Before considering a change complete:
 - [ ] `just clean-lang <language>` removes artifacts correctly
 - [ ] `just setup-all` verifies all environments still work
 - [ ] `just test-all` passes (or shows expected failures for incomplete exercises)
-- [ ] README.md updated in all 5 locations
+- [ ] **Documentation updated**:
+  - [ ] README.md: architecture, pattern list, manual commands, tech stack, statistics
+  - [ ] CHANGELOG.md: entry in "Unreleased" section with language details
 - [ ] No uncommitted generated files (run `just clean` first)
 
 ## Troubleshooting
@@ -802,9 +822,9 @@ When suggesting changes:
 
 This project demonstrates that **good architecture scales effortlessly**:
 
-- Started with 1 language → Now 14 languages (13 Nix + 1 manual)
+- Started with 1 language → Now 17 languages (16 Nix + 1 manual)
 - Complexity remained **linear** (not exponential)
-- Adding language #15 takes same effort as adding language #2
+- Adding language #17 takes same effort as adding language #2
 
 **The data structure does the work. The code just follows the structure.**
 

@@ -1,0 +1,6 @@
+# Nim build artifacts
+nimcache/
+test_*
+!test_*.nim
+
+

@@ -1,0 +1,20 @@
+setup:
+    @nix develop --command echo "Nim environment ready"
+
+clean:
+    @find . -type d -name "nimcache" -exec rm -rf {} + 2>/dev/null || true
+    @find . -type f -name "test_*" ! -name "*.nim" -exec rm -f {} + 2>/dev/null || true
+
+test project:
+    nix develop --command sh -c "cd {{project}} && nim c -r test_*.nim"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if ls "$dir"/test_*.nim >/dev/null 2>&1; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && nim c -r test_*.nim"
+        fi
+    done
+

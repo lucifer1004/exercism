@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Elm**: Added Elm environment (Elm 0.19.1 with elm-test, elm-format, elm-language-server)
+  - 1 exercise: hello-world
 - **AWK**: Added AWK environment (GNU AWK with Bats testing framework)
   - 1 exercise: hello-world
 - **Raku**: Added Raku environment (Rakudo)

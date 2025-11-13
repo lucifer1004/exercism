@@ -1,0 +1,6 @@
+# Elm build artifacts
+elm-stuff/
+
+# Repl history
+repl-temp-*
+

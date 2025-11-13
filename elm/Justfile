@@ -1,0 +1,19 @@
+setup:
+    @nix develop --command echo "Elm environment ready"
+
+clean:
+    @find . -type d -name "elm-stuff" -exec rm -rf {} + 2>/dev/null || true
+
+test project:
+    nix develop --command sh -c "cd {{project}} && elm-test"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/elm.json" ]; then
+            echo "Testing ${dir%/}..."
+            nix develop --command sh -c "cd $dir && elm-test"
+        fi
+    done
+

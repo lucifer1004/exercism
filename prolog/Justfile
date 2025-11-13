@@ -1,0 +1,23 @@
+setup:
+    @nix develop --command echo "Prolog environment ready"
+
+clean:
+    @echo "No build artifacts to clean for Prolog"
+
+test project:
+    #!/usr/bin/env bash
+    filename=$(echo "{{project}}" | tr '-' '_')
+    nix develop --command sh -c "cd {{project}} && swipl -f ${filename}.pl -s ${filename}_tests.plt -g run_tests,halt -t 'halt(1)'"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if ls "$dir"/*_tests.plt >/dev/null 2>&1; then
+            project="${dir%/}"
+            filename=$(echo "$project" | tr '-' '_')
+            echo "Testing $project..."
+            nix develop --command sh -c "cd $dir && swipl -f ${filename}.pl -s ${filename}_tests.plt -g run_tests,halt -t 'halt(1)'"
+        fi
+    done
+

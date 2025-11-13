@@ -15,6 +15,7 @@ exercism/
 ├── nim/         # Nim
 ├── awk/         # GNU AWK + Bats
 ├── elm/         # Elm 0.19.1 + elm-test + elm-language-server
+├── prolog/      # SWI-Prolog + PLUnit
 ├── zig/         # Zig + ZLS
 ├── ocaml/       # OCaml + Dune + LSP
 ├── clojure/     # Clojure + Leiningen
@@ -99,7 +100,7 @@ cd <project> && <test-command>
 
 ### Language-Specific Usage
 
-#### Standard Pattern (Python, Racket, Raku, Nim, AWK, Elm, Zig, OCaml, Clojure, Julia, Go, Haskell, Rust, Elixir, Kotlin, Crystal)
+#### Standard Pattern
 
 Most languages follow the same workflow:
 
@@ -121,6 +122,7 @@ just test knapsack     # Racket
 - **Nim**: `cd <project> && nim c -r test_*.nim`
 - **AWK**: `cd <project> && bats test-*.bats`
 - **Elm**: `cd <project> && elm-test`
+- **Prolog**: `cd <project> && swipl -f <file>.pl -s <file>_tests.plt -g run_tests,halt -t 'halt(1)'`
 - **Zig**: `cd <project> && zig test test_*.zig`
 - **OCaml**: `cd <project> && dune test`
 - **Clojure**: `cd <project> && lein test`
@@ -185,6 +187,7 @@ just test hello-world
 | Nim      | Nim 2.2 | unittest | nimlangserver |
 | AWK      | GNU AWK (gawk) | Bats | - |
 | Elm      | Elm 0.19.1 + elm-format | elm-test | elm-language-server |
+| Prolog   | SWI-Prolog 9.2.9 | PLUnit | - |
 | Zig      | Zig | Built-in | ZLS |
 | OCaml    | OCaml + Dune | OUnit2 | ocaml-lsp |
 | Clojure  | Clojure + Leiningen | clojure.test | clojure-lsp |
@@ -201,10 +204,8 @@ just test hello-world
 
 ## Project Statistics
 
-- **Languages**: 19 (18 Nix-managed + 1 manual)
-- **Exercises**: 32 (run `just stats` for breakdown)
-- **Lines of Config**: ~700
-- **Space Saved (WASM)**: 220MB via npm workspaces
+- **Languages**: 20 (19 Nix-managed + 1 manual)
+- **Exercises**: 33 (run `just stats` for breakdown)
 - **Global Commands**: 7 (`just --list` to see all)
 - **Centralized Management**: All languages defined in one place (run `just languages`)
 

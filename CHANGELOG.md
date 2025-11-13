@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Prolog**: Added Prolog environment (SWI-Prolog 9.2.9 with PLUnit)
+  - 1 exercise: hello-world
+  - Special handling: directory names use hyphens, file names use underscores
 - **Elm**: Added Elm environment (Elm 0.19.1 with elm-test, elm-format, elm-language-server)
   - 1 exercise: hello-world
 - **AWK**: Added AWK environment (GNU AWK with Bats testing framework)

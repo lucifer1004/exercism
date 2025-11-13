@@ -1,7 +1,7 @@
 # Root Justfile - Manage all language projects
 
 # Centralized list of all supported languages
-LANGUAGES := "python racket raku nim awk elm zig ocaml clojure wasm mips julia go haskell rust elixir kotlin crystal"
+LANGUAGES := "python racket raku nim awk elm prolog zig ocaml clojure wasm mips julia go haskell rust elixir kotlin crystal"
 MANUAL_LANGUAGES := "swift"  # Languages that require manual installation
 
 # List all available commands

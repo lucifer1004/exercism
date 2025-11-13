@@ -1,0 +1,21 @@
+{
+  "name": "@exercism/wasm-leap",
+  "description": "Exercism exercises in WebAssembly.",
+  "author": "Sean McBride",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exercism/wasm",
+    "directory": "exercises/practice/leap"
+  },
+  "jest": {
+    "maxWorkers": 1
+  },
+  "scripts": {
+    "test": "NODE_OPTIONS='--experimental-vm-modules' npx jest ./*",
+    "watch": "NODE_OPTIONS='--experimental-vm-modules' npx jest --watch ./*",
+    "lint": "npx eslint --config ../eslint.config.js ."
+  }
+}

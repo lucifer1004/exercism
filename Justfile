@@ -124,3 +124,8 @@ stats:
             | wc -l)
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "Total directories: $total"
+
+# Pre-commit checks
+pre-commit:
+    @echo "🔍 Running pre-commit checks..."
+    python3 ./scripts/fix-eol.py

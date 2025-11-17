@@ -16,4 +16,3 @@ test-all:
             nix develop --command sh -c "cd $dir && go test"
         fi
     done
-

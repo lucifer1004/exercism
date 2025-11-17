@@ -201,12 +201,13 @@ just test hello-world
 | Kotlin   | Gradle + JDK 21 | JUnit | kotlin-language-server |
 | Crystal  | Crystal + Shards | Crystal Spec | Crystalline |
 | Swift    | Swift Package Manager (manual) | XCTest | - |
+| PHP      | PHP 8.3 + Composer | PHPUnit | - |
 
 ## Project Statistics
 
 - **Languages**: 21 (20 Nix-managed + 1 manual)
 - **Exercises**: 40 (run `just stats` for breakdown)
-- **Global Commands**: 7 (`just --list` to see all)
+- **Global Commands**: 8 (`just --list` to see all)
 - **Centralized Management**: All languages defined in one place (run `just languages`)
 
 Run `just stats` for detailed per-language statistics.

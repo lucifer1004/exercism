@@ -177,4 +177,3 @@ just clean-lang swift      # Cleans artifacts
 ---
 
 **Last Updated**: November 2025 (Added after Nix integration attempts)
-

@@ -17,4 +17,3 @@ test-all:
             nix develop --command sh -c "cd $dir && stack test"
         fi
     done
-

@@ -20,4 +20,3 @@ test-all:
             nix develop --command sh -c "cd $dir && swipl -f ${filename}.pl -s ${filename}_tests.plt -g run_tests,halt -t 'halt(1)'"
         fi
     done
-

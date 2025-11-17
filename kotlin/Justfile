@@ -17,4 +17,3 @@ test-all:
             nix develop --command sh -c "cd $dir && gradle test --no-daemon"
         fi
     done
-

@@ -842,4 +842,3 @@ That's "good taste" in action.
 - Improves with every change
 
 **This AGENTS.md file is a living document**. It should grow smarter with every user instruction. Treat documentation as infrastructure, not afterthought.
-

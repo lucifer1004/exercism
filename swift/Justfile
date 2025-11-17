@@ -25,4 +25,3 @@ test-all:
             (cd "$dir" && swift test)
         fi
     done
-

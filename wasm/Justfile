@@ -17,4 +17,3 @@ test-all: setup
             nix develop --command sh -c "cd $dir && npm test"
         fi
     done
-

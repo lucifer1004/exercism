@@ -17,4 +17,3 @@ test-all:
             nix develop --command sh -c "cd $dir && nim c -r test_*.nim"
         fi
     done
-

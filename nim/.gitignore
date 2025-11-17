@@ -2,5 +2,3 @@
 nimcache/
 test_*
 !test_*.nim
-
-

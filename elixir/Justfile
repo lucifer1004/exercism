@@ -18,4 +18,3 @@ test-all:
             nix develop --command sh -c "cd $dir && mix test"
         fi
     done
-

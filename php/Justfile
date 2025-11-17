@@ -1,0 +1,44 @@
+# PHP commands
+
+# Setup environment
+setup:
+    @echo "🔧 Setting up PHP environment..."
+    @nix flake lock
+    @echo "✅ Environment ready! Run 'nix develop' to enter."
+
+# Test specific project
+test project:
+    #!/usr/bin/env bash
+    set -e
+    if [ ! -d "{{project}}" ]; then
+        echo "❌ Project '{{project}}' not found"
+        exit 1
+    fi
+    echo "🧪 Testing {{project}}..."
+    nix develop --command sh -c "cd {{project}} && composer install --quiet && vendor/bin/phpunit *Test.php --color=always"
+
+# Run all tests
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    echo "🧪 Testing all PHP projects..."
+    for dir in */; do
+        if [ -f "$dir"*Test.php ]; then
+            project="${dir%/}"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "Testing $project..."
+            just test "$project" || echo "⚠️  $project tests failed"
+            echo ""
+        fi
+    done
+    echo "✅ All tests completed!"
+
+# Clean build artifacts
+clean:
+    @echo "🧹 Cleaning PHP build artifacts..."
+    @find . -type d -name "vendor" -exec rm -rf {} + 2>/dev/null || true
+    @find . -type f -name "composer.lock" -delete 2>/dev/null || true
+    @find . -type f -name ".phpunit.result.cache" -delete 2>/dev/null || true
+    @echo "✅ Cleanup complete!"
+
+

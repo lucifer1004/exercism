@@ -1,0 +1,10 @@
+{
+    "name": "exercism/luhn",
+    "description": "Exercism luhn exercise for PHP",
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload": {
+        "files": ["Luhn.php"]
+    }
+}

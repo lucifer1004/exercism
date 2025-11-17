@@ -204,8 +204,8 @@ just test hello-world
 
 ## Project Statistics
 
-- **Languages**: 20 (19 Nix-managed + 1 manual)
-- **Exercises**: 38 (run `just stats` for breakdown)
+- **Languages**: 21 (20 Nix-managed + 1 manual)
+- **Exercises**: 40 (run `just stats` for breakdown)
 - **Global Commands**: 7 (`just --list` to see all)
 - **Centralized Management**: All languages defined in one place (run `just languages`)
 
@@ -359,4 +359,3 @@ MIT
 - [Exercism](https://exercism.org)
 - [Nix Flakes](https://nixos.wiki/wiki/Flakes)
 - [Just Command Runner](https://github.com/casey/just)
-

@@ -205,7 +205,7 @@ just test hello-world
 ## Project Statistics
 
 - **Languages**: 20 (19 Nix-managed + 1 manual)
-- **Exercises**: 37 (run `just stats` for breakdown)
+- **Exercises**: 38 (run `just stats` for breakdown)
 - **Global Commands**: 7 (`just --list` to see all)
 - **Centralized Management**: All languages defined in one place (run `just languages`)
 

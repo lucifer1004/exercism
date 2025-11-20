@@ -1,8 +1,11 @@
 setup:
-    @nix develop --command echo "Julia environment ready"
+    @nix develop --command sh -c "julia --project=. -e 'using Pkg; Pkg.instantiate()'"
 
 clean:
     @find . -type d -name ".julia" -exec rm -rf {} + 2>/dev/null || true
+
+format:
+    nix develop --command sh -c "julia --project=. -e 'using JuliaFormatter; format(\".\")'"
 
 test project:
     nix develop --command sh -c "cd {{project}} && julia runtests.jl"

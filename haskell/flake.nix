@@ -15,6 +15,7 @@
           pkgs.ghc
           pkgs.stack
           pkgs.haskell-language-server
+          pkgs.ormolu
         ];
       };
     };

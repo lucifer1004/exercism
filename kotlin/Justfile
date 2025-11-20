@@ -5,6 +5,9 @@ clean:
     @find . -type d -name "build" -exec rm -rf {} + 2>/dev/null || true
     @find . -type d -name ".gradle" -exec rm -rf {} + 2>/dev/null || true
 
+format:
+    nix develop --command sh -c "find . -name '*.kt' -not -path './.*' -not -path '*/build/*' | xargs -r ktlint -F"
+
 test project:
     nix develop --command sh -c "cd {{project}} && gradle test --no-daemon"
 

@@ -16,6 +16,7 @@
           pkgs.kotlin
           pkgs.gradle
           pkgs.kotlin-language-server
+          pkgs.ktlint
         ];
       };
     };

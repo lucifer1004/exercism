@@ -33,6 +33,10 @@ test-all:
     done
     echo "✅ All tests completed!"
 
+# Format code
+format:
+    nix develop --command sh -c "find . -name '*.php' -not -path './*/vendor/*' -not -path './.*' | xargs -r php-cs-fixer fix"
+
 # Clean build artifacts
 clean:
     @echo "🧹 Cleaning PHP build artifacts..."

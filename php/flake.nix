@@ -13,6 +13,7 @@
         buildInputs = with pkgs; [
           php83           # PHP 8.3
           php83Packages.composer  # Dependency manager
+          php83Packages.php-cs-fixer  # Code formatter
         ];
 
         shellHook = ''

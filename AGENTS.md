@@ -186,7 +186,7 @@ LANGUAGES := "python racket zig ocaml clojure wasm mips julia go haskell rust"
 
 1. **Create language directory structure**:
    - `flake.nix` (Nix environment) or manual install docs
-   - `Justfile` (MUST implement: `setup`, `clean`, `test`, `test-all`)
+   - `Justfile` (MUST implement: `setup`, `clean`, `test`, `test-all`, `format`)
    - `.gitignore` (language-specific artifacts ONLY)
 
 2. **Update `LANGUAGES` variable** (root `Justfile` line 4):
@@ -207,6 +207,8 @@ LANGUAGES := "python racket zig ocaml clojure wasm mips julia go haskell rust"
 **Key workflow**:
 - Test single language: `just test-lang <language>` (from root)
 - Test everything: `just test-all` (always run before committing)
+- Format single language: `just format-lang <language>` (from root)
+- Format everything: `just format-all` (standardize code style)
 - Clean artifacts: `just clean` (run before committing)
 
 ### Clean-up Rules
@@ -266,12 +268,14 @@ clean:
 ✅ **Keep languages isolated**: No cross-language dependencies
 ✅ **Use the LANGUAGES variable**: Single source of truth
 ✅ **Include language server**: Essential for good DX
-✅ **Add setup/clean/test-all to language Justfile**: Standard interface for all languages
+✅ **Add setup/clean/test-all/format to language Justfile**: Standard interface for all languages
+✅ **Add formatter to flake.nix**: Use language's standard formatter (black, rustfmt, gofmt, etc.)
 ✅ **Create `<language>/.gitignore`**: Each language manages its own build artifacts
 ✅ **Update LANGUAGES variable**: Single line change in root Justfile
 ✅ **Update README.md**: Document the new language
 ✅ **Update AGENTS.md**: Capture general patterns and language-specific quirks
 ✅ **Test before committing**: `just test-all`
+✅ **Format before committing**: `just format-all` (optional but recommended)
 
 ### DON'T
 
@@ -291,8 +295,8 @@ clean:
 ```bash
 # 1. Create structure
 mkdir <language>
-# 2. Write flake.nix (use template above)
-# 3. Write Justfile with setup/clean/test/test-all
+# 2. Write flake.nix (include formatter if available)
+# 3. Write Justfile with setup/clean/test/test-all/format
 # 4. Write <language>/.gitignore (language-specific artifacts)
 # 5. Update LANGUAGES variable in root Justfile (ONE line!)
 # 6. Update documentation (CRITICAL - 6 locations):
@@ -303,7 +307,7 @@ mkdir <language>
 #    d) README.md - Technology Stack table (~line 176): Add row with toolchain/test framework/LSP
 #    e) README.md - Project Statistics (~line 196-199): Update language count and exercise count
 #    f) CHANGELOG.md - Add entry in "Unreleased" section documenting the addition
-# 7. Test: just setup <language> && just clean-lang <language> && just test-lang <language>
+# 7. Test: just setup <language> && just format-lang <language> && just test-lang <language> && just clean-lang <language>
 ```
 
 **CRITICAL**: Step 6 is NOT optional. Documentation must be updated whenever adding a language.
@@ -353,8 +357,9 @@ just setup <language>
 
 # Run full verification
 just setup <language>
-just clean-lang <language>
+just format-lang <language>
 just test-lang <language>
+just clean-lang <language>
 
 # Manual inspection (if needed)
 cd <language>
@@ -500,9 +505,11 @@ Before considering a change complete:
 - [ ] `just languages` shows the new language
 - [ ] `just stats` counts exercises correctly
 - [ ] `just setup <language>` verifies environment builds
+- [ ] `just format-lang <language>` runs without errors
 - [ ] `just test-lang <language>` passes (or shows expected failures)
 - [ ] `just clean-lang <language>` removes artifacts correctly
 - [ ] `just setup-all` verifies all environments still work
+- [ ] `just format-all` runs on all languages
 - [ ] `just test-all` passes (or shows expected failures for incomplete exercises)
 - [ ] **Documentation updated**:
   - [ ] README.md: architecture, pattern list, manual commands, tech stack, statistics
@@ -716,6 +723,7 @@ cd wasm && npm install && just test <project>
 
 **Most critical commands for AI agents**:
 - `just test-all` - Always run before finishing a task
+- `just format-all` - Standardize code style across all languages
 - `just clean` - Always run before committing
 - `just languages` - Verify language added to LANGUAGES variable
 - `just stats` - Verify exercise counts after changes

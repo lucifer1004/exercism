@@ -207,7 +207,7 @@ just test hello-world
 
 - **Languages**: 21 (20 Nix-managed + 1 manual)
 - **Exercises**: 40 (run `just stats` for breakdown)
-- **Global Commands**: 8 (`just --list` to see all)
+- **Global Commands**: 10 (`just --list` to see all)
 - **Centralized Management**: All languages defined in one place (run `just languages`)
 
 Run `just stats` for detailed per-language statistics.
@@ -224,6 +224,7 @@ just languages           # List all supported languages
 just stats              # Show exercise counts per language
 just setup-all          # Setup all environments
 just test-all           # Run all tests in all languages
+just format-all         # Format code in all languages
 just clean              # Remove all build artifacts
 just update-all         # Update all flake locks
 ```
@@ -232,6 +233,7 @@ just update-all         # Update all flake locks
 ```bash
 just setup <language>        # Setup specific environment
 just test-lang <language>    # Test all exercises in language
+just format-lang <language>  # Format code in specific language
 just clean-lang <language>   # Clean language artifacts
 just update <language>       # Update language flake lock
 ```

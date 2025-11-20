@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Code Formatting**: Added `format` command to all 21 languages
+  - Standard formatters: black (Python), rustfmt (Rust), gofmt (Go), elm-format (Elm), mix format (Elixir), crystal tool format (Crystal), cljfmt (Clojure), ormolu (Haskell), nimpretty (Nim), ocamlformat (OCaml), ktlint (Kotlin), php-cs-fixer (PHP), zig fmt (Zig), prettier (WASM)
+  - Special handling: JuliaFormatter.jl via Project.toml for Julia
+  - Global commands: `just format-all`, `just format-lang <language>`
+  - Languages without standard formatters provide helpful messages (AWK, MIPS, Prolog, Raku, Racket, Swift)
 - **Prolog**: Added Prolog environment (SWI-Prolog 9.2.9 with PLUnit)
   - 1 exercise: hello-world
   - Special handling: directory names use hyphens, file names use underscores

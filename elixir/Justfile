@@ -6,6 +6,14 @@ clean:
     @find . -type d -name "deps" -exec rm -rf {} + 2>/dev/null || true
     @find . -name "*.beam" -type f -delete 2>/dev/null || true
 
+format:
+    #!/usr/bin/env bash
+    for dir in */; do
+        if [ -f "$dir/mix.exs" ]; then
+            nix develop --command sh -c "cd $dir && mix format"
+        fi
+    done
+
 test project:
     nix develop --command sh -c "cd {{project}} && mix test"
 

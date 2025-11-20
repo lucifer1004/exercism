@@ -4,6 +4,9 @@ setup:
 clean:
     @echo "No build artifacts to clean for Prolog"
 
+format:
+    @echo "⚠️  No standard formatter available for Prolog"
+
 test project:
     #!/usr/bin/env bash
     filename=$(echo "{{project}}" | tr '-' '_')

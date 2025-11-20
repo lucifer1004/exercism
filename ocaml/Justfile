@@ -4,6 +4,9 @@ setup:
 clean:
     @find . -type d -name "_build" -exec rm -rf {} + 2>/dev/null || true
 
+format:
+    nix develop --command sh -c "find . -name '*.ml' -o -name '*.mli' | grep -v '_build' | xargs -r ocamlformat --inplace"
+
 test project:
     nix develop --command sh -c "cd {{project}} && dune test"
 

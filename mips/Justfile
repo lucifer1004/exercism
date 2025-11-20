@@ -4,6 +4,9 @@ setup:
 clean:
     @rm -f mars.jar 2>/dev/null || true
 
+format:
+    @echo "⚠️  No standard formatter available for MIPS assembly"
+
 test project: setup
     nix develop --command sh -c "cd {{project}} && java -jar ../mars.jar nc runner.mips impl.mips"
 

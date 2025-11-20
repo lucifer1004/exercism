@@ -14,6 +14,7 @@
         buildInputs = [
           pkgs.python314
           pkgs.python314Packages.pytest
+          pkgs.black
         ];
       };
     };

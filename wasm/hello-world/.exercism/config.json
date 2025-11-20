@@ -1,20 +1,10 @@
 {
-  "authors": [
-    "bushidocodes"
-  ],
+  "authors": ["bushidocodes"],
   "files": {
-    "solution": [
-      "hello-world.wat"
-    ],
-    "test": [
-      "hello-world.spec.js"
-    ],
-    "example": [
-      ".meta/proof.ci.wat"
-    ],
-    "invalidator": [
-      "package.json"
-    ]
+    "solution": ["hello-world.wat"],
+    "test": ["hello-world.spec.js"],
+    "example": [".meta/proof.ci.wat"],
+    "invalidator": ["package.json"]
   },
   "blurb": "The classical introductory exercise. Just say \"Hello, World!\"",
   "source": "This is an exercise to introduce users to using Exercism",

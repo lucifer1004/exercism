@@ -1,1 +1,9 @@
-{"track":"wasm","exercise":"darts","id":"f98dae2f26d44a5bad001fa8f199048e","url":"https://exercism.org/tracks/wasm/exercises/darts","handle":"lucifer1004","is_requester":true,"auto_approve":false}
+{
+  "track": "wasm",
+  "exercise": "darts",
+  "id": "f98dae2f26d44a5bad001fa8f199048e",
+  "url": "https://exercism.org/tracks/wasm/exercises/darts",
+  "handle": "lucifer1004",
+  "is_requester": true,
+  "auto_approve": false
+}

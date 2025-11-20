@@ -4,6 +4,9 @@ setup:
 clean:
     @find . -name "zig-cache" -type d -exec rm -rf {} + 2>/dev/null || true
 
+format:
+    nix develop --command sh -c "find . -name '*.zig' -not -path './*/zig-cache/*' -not -path './.*' -exec zig fmt {} +"
+
 test project:
     nix develop --command sh -c "cd {{project}} && zig test test*"
 

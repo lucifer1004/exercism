@@ -4,6 +4,10 @@ setup:
 clean:
     @echo "Racket: no build artifacts to clean"
 
+format:
+    @echo "ℹ️  Racket formatting requires fmt package"
+    @echo "    Run: raco pkg install fmt && raco fmt -i ."
+
 test project:
     nix develop --command sh -c "cd {{project}} && raco test ."
 

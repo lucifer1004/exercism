@@ -5,6 +5,9 @@ clean:
     @rm -rf node_modules package-lock.json 2>/dev/null || true
     @find . -name "node_modules" -type d -exec rm -rf {} + 2>/dev/null || true
 
+format: setup
+    nix develop --command sh -c "npx prettier --write '**/*.{js,ts,json}'"
+
 test project: setup
     nix develop --command sh -c "cd {{project}} && npm test"
 

@@ -1,20 +1,10 @@
 {
-  "authors": [
-    "bushidocodes"
-  ],
+  "authors": ["bushidocodes"],
   "files": {
-    "solution": [
-      "leap.wat"
-    ],
-    "test": [
-      "leap.spec.js"
-    ],
-    "example": [
-      ".meta/proof.ci.wat"
-    ],
-    "invalidator": [
-      "package.json"
-    ]
+    "solution": ["leap.wat"],
+    "test": ["leap.spec.js"],
+    "example": [".meta/proof.ci.wat"],
+    "invalidator": ["package.json"]
   },
   "blurb": "Determine whether a given year is a leap year.",
   "source": "CodeRanch Cattle Drive, Assignment 3",

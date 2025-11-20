@@ -5,6 +5,14 @@ clean:
     @find . -type d -name "target" -exec rm -rf {} + 2>/dev/null || true
     @find . -name "Cargo.lock" -type f -delete 2>/dev/null || true
 
+format:
+    #!/usr/bin/env bash
+    for dir in */; do
+        if [ -f "$dir/Cargo.toml" ]; then
+            nix develop --command sh -c "cd $dir && cargo fmt"
+        fi
+    done
+
 test project:
     nix develop --command sh -c "cd {{project}} && cargo test"
 

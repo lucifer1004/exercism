@@ -4,6 +4,9 @@ setup:
 clean:
     @echo "Raku: no build artifacts to clean"
 
+format:
+    @echo "⚠️  No standard formatter available for Raku"
+
 test project:
     nix develop --command sh -c "cd {{project}} && raku t/*.rakutest"
 

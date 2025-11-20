@@ -11,6 +11,12 @@ clean:
     @find . -type d -name ".build" -exec rm -rf {} + 2>/dev/null || true
     @find . -name "Package.resolved" -type f -delete 2>/dev/null || true
 
+# Format code
+format:
+    @echo "ℹ️  Swift formatting requires swift-format tool"
+    @echo "    Install: brew install swift-format (on macOS)"
+    @echo "    Then run: swift-format -i -r ."
+
 # Test a specific project
 test project:
     cd {{project}} && swift test

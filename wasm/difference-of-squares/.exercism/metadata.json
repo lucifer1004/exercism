@@ -1,1 +1,9 @@
-{"track":"wasm","exercise":"difference-of-squares","id":"d400fdc6ae494e8f9e57d80870a8d002","url":"https://exercism.org/tracks/wasm/exercises/difference-of-squares","handle":"lucifer1004","is_requester":true,"auto_approve":false}
+{
+  "track": "wasm",
+  "exercise": "difference-of-squares",
+  "id": "d400fdc6ae494e8f9e57d80870a8d002",
+  "url": "https://exercism.org/tracks/wasm/exercises/difference-of-squares",
+  "handle": "lucifer1004",
+  "is_requester": true,
+  "auto_approve": false
+}

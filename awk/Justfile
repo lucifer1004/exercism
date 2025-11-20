@@ -4,6 +4,9 @@ setup:
 clean:
     @echo "No build artifacts to clean for AWK"
 
+format:
+    @echo "⚠️  No standard formatter available for AWK"
+
 test project:
     nix develop --command sh -c "cd {{project}} && bats test-*.bats"
 

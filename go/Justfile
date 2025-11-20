@@ -4,6 +4,14 @@ setup:
 clean:
     @find . -name "go.sum" -type f -delete 2>/dev/null || true
 
+format:
+    #!/usr/bin/env bash
+    for dir in */; do
+        if [ -f "$dir/go.mod" ]; then
+            nix develop --command sh -c "cd $dir && go fmt ./..."
+        fi
+    done
+
 test project:
     nix develop --command sh -c "cd {{project}} && go test"
 

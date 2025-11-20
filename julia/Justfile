@@ -4,7 +4,7 @@ setup:
 clean:
     @find . -type d -name ".julia" -exec rm -rf {} + 2>/dev/null || true
 
-format:
+format: setup
     nix develop --command sh -c "julia --project=. -e 'using JuliaFormatter; format(\".\")'"
 
 test project:

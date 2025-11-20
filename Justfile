@@ -74,6 +74,33 @@ update-all:
     done
     echo "✅ All flakes updated!"
 
+# Format code in specific language
+format-lang lang:
+    @echo "🎨 Formatting {{lang}} code..."
+    @cd {{lang}} && just format
+
+# Format code in all languages
+format-all:
+    #!/usr/bin/env bash
+    echo "🎨 Formatting all Exercism projects..."
+    echo ""
+    
+    for lang in {{LANGUAGES}} {{MANUAL_LANGUAGES}}; do
+        if [ -d "$lang" ] && [ -f "$lang/Justfile" ]; then
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "🎨 Formatting $lang projects..."
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            if grep -q "^format:" "$lang/Justfile" 2>/dev/null; then
+                (cd "$lang" && just format) || echo "⚠️  $lang formatting failed"
+            else
+                echo "ℹ️  No format command for $lang"
+            fi
+            echo ""
+        fi
+    done
+    
+    echo "✅ All formatting completed!"
+
 # Clean specific language build artifacts
 clean-lang lang:
     @echo "🧹 Cleaning {{lang}} build artifacts..."

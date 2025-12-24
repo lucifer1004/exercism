@@ -1,0 +1,24 @@
+{
+  "authors": [
+    "stevejb71"
+  ],
+  "contributors": [
+    "NobbZ",
+    "srenatus",
+    "yurrriq"
+  ],
+  "files": {
+    "solution": [
+      "src/HelloWorld.idr"
+    ],
+    "test": [
+      "test/src/Main.idr"
+    ],
+    "example": [
+      "example/HelloWorld.idr"
+    ]
+  },
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program"
+}

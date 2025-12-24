@@ -1,7 +1,7 @@
 # Root Justfile - Manage all language projects
 
 # Centralized list of all supported languages
-LANGUAGES := "python racket raku nim awk elm prolog zig ocaml clojure wasm mips julia go haskell rust elixir kotlin crystal php dart"
+LANGUAGES := "python racket raku nim awk elm prolog zig ocaml clojure wasm mips julia go haskell rust elixir kotlin crystal php dart idris"
 MANUAL_LANGUAGES := "swift"  # Languages that require manual installation
 
 # List all available commands
@@ -20,10 +20,10 @@ languages:
 test-all:
     #!/usr/bin/env bash
     set -e
-    
+
     echo "🧪 Testing all Exercism projects..."
     echo ""
-    
+
     for lang in {{LANGUAGES}} {{MANUAL_LANGUAGES}}; do
         if [ -d "$lang" ] && [ -f "$lang/Justfile" ]; then
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -37,7 +37,7 @@ test-all:
             echo ""
         fi
     done
-    
+
     echo "✅ All tests completed!"
 
 # Test specific language
@@ -84,7 +84,7 @@ format-all:
     #!/usr/bin/env bash
     echo "🎨 Formatting all Exercism projects..."
     echo ""
-    
+
     for lang in {{LANGUAGES}} {{MANUAL_LANGUAGES}}; do
         if [ -d "$lang" ] && [ -f "$lang/Justfile" ]; then
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -98,7 +98,7 @@ format-all:
             echo ""
         fi
     done
-    
+
     echo "✅ All formatting completed!"
 
 # Clean specific language build artifacts
@@ -129,7 +129,7 @@ stats:
     echo "📊 Project Statistics"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
-    
+
     for lang in {{LANGUAGES}} {{MANUAL_LANGUAGES}}; do
         if [ -d "$lang" ]; then
             count=$(find "$lang" -mindepth 1 -maxdepth 1 -type d \
@@ -141,7 +141,7 @@ stats:
             printf "%-12s : %2d exercises\n" "$lang" "$count"
         fi
     done
-    
+
     echo ""
     total=$(find . -maxdepth 2 -type d \
             ! -path "./.*" \
@@ -155,4 +155,4 @@ stats:
 # Pre-commit checks
 pre-commit:
     @echo "🔍 Running pre-commit checks..."
-    python3 ./scripts/fix-eol.py
+    pre-commit run --all-files

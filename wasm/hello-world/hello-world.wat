@@ -3,7 +3,7 @@
 
   ;; Initializes the WebAssembly Linear Memory with a UTF-8 string of 13 characters starting at offset 64
   (data (i32.const 64) "Hello, World!")
-  
+
   ;;
   ;; Return a greeting
   ;;

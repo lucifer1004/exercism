@@ -1,4 +1,4 @@
-let square_of_sum x = 
+let square_of_sum x =
     (x * (x + 1) / 2) * (x * (x + 1) / 2)
 
 let sum_of_squares x =

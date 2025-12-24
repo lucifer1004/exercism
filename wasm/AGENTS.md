@@ -105,7 +105,7 @@ npm install  # Or: just setup
 
 **Flat config location**: `wasm/eslint.config.js` (shared by all exercises).
 
-**Why flat config**: 
+**Why flat config**:
 - Simpler configuration
 - Better IDE integration
 - Required for ESLint 9+
@@ -177,4 +177,3 @@ just clean  # Removes:
 ---
 
 **Last Updated**: November 2025 (ESLint 8→9 migration, Jest 29→30 upgrade)
-

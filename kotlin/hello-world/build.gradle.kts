@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    
+
     testImplementation("junit:junit:4.13.2")
     testImplementation(kotlin("test-junit"))
 }

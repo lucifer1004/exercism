@@ -1,0 +1,9 @@
+# Idris build artifacts
+build/
+*.ibc
+*.ttc
+
+# IDE files
+.idea/
+*.iml
+.vscode/

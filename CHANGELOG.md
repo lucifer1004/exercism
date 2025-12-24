@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Idris**: Added Idris 2 environment (dependent type functional programming language)
+  - Standard toolchain: idris2 compiler
+  - Testing: Built-in compilation and type checking
+  - Standard pattern: follows conventional setup/clean/test/test-all/format workflow
+  - Build system: .ipkg package files
 - **Dart**: Added Dart environment (Dart SDK with pub package manager)
   - Standard toolchain: dart SDK, pub, dart format, dart analyze
   - Testing: package:test

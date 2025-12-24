@@ -1,0 +1,33 @@
+# Idris-specific commands
+
+# Set up development environment
+setup:
+    @echo "Setting up Idris 2 environment..."
+    @nix flake lock
+    @nix develop --command idris2 --version
+    @echo "Idris 2 environment ready!"
+
+# Run tests for a specific project
+test project:
+    nix develop --command sh -c "cd {{project}} && pack test {{project}}"
+
+# Run tests for all projects
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if ls "$dir"/*.ipkg >/dev/null 2>&1; then
+            project="${dir%/}"
+            echo "Testing $project..."
+            just test "$project"
+        fi
+    done
+
+# Format all projects
+format:
+    @echo "⚠️  No standard formatter available for Idris 2"
+
+# Clean build artifacts
+clean:
+    @find . -type d -name "build" -exec rm -rf {} + 2>/dev/null || true
+    @echo "Idris artifacts cleaned"

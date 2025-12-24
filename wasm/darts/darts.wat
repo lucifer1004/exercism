@@ -31,34 +31,34 @@
     (f32.const 1.0)
     (f32.le)
     (if
-      (then 
+      (then
         i32.const 10
-        local.set $score  
+        local.set $score
       )
       (else
         (local.get $distance)
         (f32.const 5.0)
         (f32.le)
         (if
-          (then 
+          (then
             i32.const 5
-            local.set $score  
+            local.set $score
           )
           (else
             (local.get $distance)
             (f32.const 10.0)
             (f32.le)
             (if
-              (then 
+              (then
                 i32.const 1
-                local.set $score  
+                local.set $score
               )
             )
           )
         )
       )
     )
-  
+
     (local.get $score)
   )
 )

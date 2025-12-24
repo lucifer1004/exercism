@@ -28,35 +28,35 @@ function isValid(string $number): bool
 {
     // Remove spaces
     $digits = str_replace(' ', '', $number);
-    
+
     // Length must be > 1
     if (strlen($digits) <= 1) {
         return false;
     }
-    
+
     // Only digits allowed
     if (!ctype_digit($digits)) {
         return false;
     }
-    
+
     // Apply Luhn algorithm
     $sum = 0;
     $shouldDouble = false;
-    
+
     // Process from right to left
     for ($i = strlen($digits) - 1; $i >= 0; $i--) {
         $digit = (int)$digits[$i];
-        
+
         if ($shouldDouble) {
             $digit *= 2;
             if ($digit > 9) {
                 $digit -= 9;
             }
         }
-        
+
         $sum += $digit;
         $shouldDouble = !$shouldDouble;
     }
-    
+
     return $sum % 10 === 0;
 }

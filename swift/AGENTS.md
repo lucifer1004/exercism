@@ -139,7 +139,7 @@ just clean-lang swift      # Cleans artifacts
 
 **Attempted**: Nix flake with Swift toolchain.
 
-**Result**: 
+**Result**:
 - Foundation framework linking errors
 - LLDB crashes
 - Dynamic library resolution failures

@@ -409,14 +409,14 @@ User: "Gradle daemon causes memory issues in CI, always use --no-daemon"
 Action:
 1. Create/Update kotlin/AGENTS.md:
    ## Gradle Configuration
-   
+
    **Critical**: Always use `--no-daemon` flag to prevent memory leaks in CI environments.
-   
+
    ```justfile
    test project:
        gradle test --no-daemon
    ```
-   
+
    **Why**: Gradle daemon keeps JVM running, consuming memory even after tests complete.
 ```
 
@@ -775,7 +775,7 @@ When suggesting changes:
 
 **Solution**: Self-documenting codebase with living AGENTS.md files.
 
-**Result**: 
+**Result**:
 - New patterns captured immediately
 - Language quirks documented at source
 - Zero knowledge loss between sessions
@@ -819,7 +819,7 @@ When suggesting changes:
 
 **Solution**: Restructured to 1 standard pattern + 3 special cases
 
-**Result**: 
+**Result**:
 - 46% reduction in documentation size (137 → 73 lines)
 - Adding new language: add name to parentheses (zero code duplication)
 - Special cases clearly separated from standard workflow

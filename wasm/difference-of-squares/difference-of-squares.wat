@@ -48,7 +48,7 @@
   )
 
   ;;
-  ;; Calculate the difference between the square of the sum and the sum of the 
+  ;; Calculate the difference between the square of the sum and the sum of the
   ;; squares of the first N natural numbers.
   ;;
   ;; @param {i32} max - The upper bound (inclusive) of natural numbers to consider

@@ -1,6 +1,6 @@
 # Hello World
 
-Welcome to Hello World on Exercism's Dart Track.
+Welcome to Hello World on Exercism's Idris Track.
 If you need help running the tests or submitting your code, check out `HELP.md`.
 
 ## Instructions
@@ -24,12 +24,13 @@ If everything goes well, you will be ready to fetch your first real exercise.
 
 ### Created by
 
-- @SuperPaintman
+- @stevejb71
 
 ### Contributed to by
 
-- @rafaelalvessa
-- @Stargator
+- @NobbZ
+- @srenatus
+- @yurrriq
 
 ### Based on
 

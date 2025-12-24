@@ -17,7 +17,8 @@ test-all:
     set -e
     for dir in */; do
         if [ -f "$dir/spec" ] || ls "$dir"/*_spec.cr &>/dev/null; then
-            echo "Testing ${dir%/}..."
-            nix develop --command sh -c "cd $dir && crystal spec"
+            project="${dir%/}"
+            echo "Testing $project..."
+            just test "$project"
         fi
     done

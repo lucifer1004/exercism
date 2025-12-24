@@ -16,7 +16,8 @@ test-all:
     set -e
     for dir in */; do
         if ls "$dir"/*_test.py >/dev/null 2>&1 || ls "$dir"/test_*.py >/dev/null 2>&1; then
-            echo "Testing ${dir%/}..."
-            nix develop --command sh -c "cd $dir && pytest"
+            project="${dir%/}"
+            echo "Testing $project..."
+            just test "$project"
         fi
     done

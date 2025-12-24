@@ -15,7 +15,8 @@ test-all:
     set -e
     for dir in */; do
         if ls "$dir"/test_*.zig >/dev/null 2>&1 || ls "$dir"/test*.zig >/dev/null 2>&1; then
-            echo "Testing ${dir%/}..."
-            nix develop --command sh -c "cd $dir && zig test test*"
+            project="${dir%/}"
+            echo "Testing $project..."
+            just test "$project"
         fi
     done

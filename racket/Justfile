@@ -16,7 +16,8 @@ test-all:
     set -e
     for dir in */; do
         if ls "$dir"/*-test.rkt >/dev/null 2>&1 || ls "$dir"/*_test.rkt >/dev/null 2>&1; then
-            echo "Testing ${dir%/}..."
-            nix develop --command sh -c "cd $dir && raco test ."
+            project="${dir%/}"
+            echo "Testing $project..."
+            just test "$project"
         fi
     done

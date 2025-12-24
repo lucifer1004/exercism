@@ -8,12 +8,14 @@
   outputs = { self, nixpkgs }:
     let
       pkgs = import nixpkgs { system = "x86_64-linux"; };
+      python = pkgs.python314.withPackages (ps: with ps; [
+        pytest
+      ]);
     in
     {
       devShells.x86_64-linux.default = pkgs.mkShell {
         buildInputs = [
-          pkgs.python314
-          pkgs.python314Packages.pytest
+          python
           pkgs.black
         ];
       };

@@ -16,7 +16,8 @@ test-all: setup
     set -e
     for dir in */; do
         if [ -f "$dir/package.json" ] && [ "$dir" != "node_modules/" ]; then
-            echo "Testing ${dir%/}..."
-            nix develop --command sh -c "cd $dir && npm test"
+            project="${dir%/}"
+            echo "Testing $project..."
+            just test "$project"
         fi
     done

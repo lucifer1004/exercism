@@ -23,17 +23,12 @@ test-all:
         fi
     done
 
-# Format code for a specific project
-format project:
-    nix develop --command sh -c "cd {{project}} && dart format ."
-
 # Format all projects
-format-all:
+format:
     #!/usr/bin/env bash
     for dir in */; do
         if [ -f "$dir/pubspec.yaml" ]; then
-            project="${dir%/}"
-            just format "$project"
+            nix develop --command sh -c "cd $dir && dart format ."
         fi
     done
 

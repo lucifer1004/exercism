@@ -20,7 +20,8 @@ test-all:
     set -e
     for dir in */; do
         if [ -f "$dir/go.mod" ] || ls "$dir"/*_test.go >/dev/null 2>&1; then
-            echo "Testing ${dir%/}..."
-            nix develop --command sh -c "cd $dir && go test"
+            project="${dir%/}"
+            echo "Testing $project..."
+            just test "$project"
         fi
     done

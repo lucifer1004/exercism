@@ -1,0 +1,45 @@
+# Dart-specific commands
+
+# Set up development environment
+setup:
+    @echo "Setting up Dart environment..."
+    @nix flake lock
+    @nix develop --command dart --version
+    @echo "Dart environment ready!"
+
+# Run tests for a specific project
+test project:
+    nix develop --command sh -c "cd {{project}} && dart pub get && dart test"
+
+# Run tests for all projects
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    for dir in */; do
+        if [ -f "$dir/pubspec.yaml" ]; then
+            project="${dir%/}"
+            echo "Testing $project..."
+            just test "$project" || echo "⚠️  $project tests failed"
+        fi
+    done
+
+# Format code for a specific project
+format project:
+    nix develop --command sh -c "cd {{project}} && dart format ."
+
+# Format all projects
+format-all:
+    #!/usr/bin/env bash
+    for dir in */; do
+        if [ -f "$dir/pubspec.yaml" ]; then
+            project="${dir%/}"
+            just format "$project"
+        fi
+    done
+
+# Clean build artifacts
+clean:
+    @find . -type d -name ".dart_tool" -exec rm -rf {} + 2>/dev/null || true
+    @find . -type d -name "build" -exec rm -rf {} + 2>/dev/null || true
+    @find . -type f -name "pubspec.lock" -delete 2>/dev/null || true
+    @echo "Dart artifacts cleaned"

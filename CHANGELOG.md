@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Dart**: Added Dart environment (Dart SDK with pub package manager)
+  - Standard toolchain: dart SDK, pub, dart format, dart analyze
+  - Testing: package:test
+  - Built-in language server support
+  - Standard pattern: follows conventional setup/clean/test/test-all/format workflow
 - **Code Formatting**: Added `format` command to all 21 languages
   - Standard formatters: black (Python), rustfmt (Rust), gofmt (Go), elm-format (Elm), mix format (Elixir), crystal tool format (Crystal), cljfmt (Clojure), ormolu (Haskell), nimpretty (Nim), ocamlformat (OCaml), ktlint (Kotlin), php-cs-fixer (PHP), zig fmt (Zig), prettier (WASM)
   - Special handling: JuliaFormatter.jl via Project.toml for Julia

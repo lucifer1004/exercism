@@ -1,0 +1,10 @@
+# Dart build artifacts
+.dart_tool/
+build/
+pubspec.lock
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+

@@ -28,6 +28,8 @@ exercism/
 ├── elixir/      # Elixir + Mix + ElixirLS
 ├── kotlin/      # Kotlin + Gradle + kotlin-language-server
 ├── crystal/     # Crystal + Crystalline
+├── php/         # PHP 8.3 + Composer + PHPUnit
+├── dart/        # Dart SDK + pub + dart test
 └── swift/       # Swift (manual installation required)
 ```
 
@@ -111,7 +113,7 @@ just test <project>    # Run specific exercise
 
 # Examples:
 just test leap         # Python/OCaml/Clojure/Raku
-just test hello-world  # Rust/Go/Haskell/Zig/Kotlin/Crystal/Elixir/Nim/Raku
+just test hello-world  # Rust/Go/Haskell/Zig/Kotlin/Crystal/Elixir/Nim/Raku/Dart
 just test knapsack     # Racket
 ```
 
@@ -133,6 +135,7 @@ just test knapsack     # Racket
 - **Elixir**: `cd <project> && mix test`
 - **Kotlin**: `cd <project> && gradle test --no-daemon`
 - **Crystal**: `cd <project> && crystal spec`
+- **Dart**: `cd <project> && dart pub get && dart test`
 
 ---
 
@@ -202,11 +205,12 @@ just test hello-world
 | Crystal  | Crystal + Shards | Crystal Spec | Crystalline |
 | Swift    | Swift Package Manager (manual) | XCTest | - |
 | PHP      | PHP 8.3 + Composer | PHPUnit | - |
+| Dart     | Dart SDK + pub | package:test | Built-in |
 
 ## Project Statistics
 
-- **Languages**: 21 (20 Nix-managed + 1 manual)
-- **Exercises**: 40 (run `just stats` for breakdown)
+- **Languages**: 22 (21 Nix-managed + 1 manual)
+- **Exercises**: 40+ (run `just stats` for breakdown)
 - **Global Commands**: 10 (`just --list` to see all)
 - **Centralized Management**: All languages defined in one place (run `just languages`)
 

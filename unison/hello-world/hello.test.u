@@ -1,0 +1,5 @@
+hello.test : [Result]
+hello.test =
+  expected = "Hello, World!"
+  check (hello === expected)
+test> hello.tests = join [hello.test]

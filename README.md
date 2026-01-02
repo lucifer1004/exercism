@@ -31,6 +31,7 @@ exercism/
 ├── php/         # PHP 8.3 + Composer + PHPUnit
 ├── dart/        # Dart SDK + pub + dart test
 ├── idris/       # Idris 2
+├── unison/      # Unison (content-addressed functional language)
 └── swift/       # Swift (manual installation required)
 ```
 
@@ -114,7 +115,7 @@ just test <project>    # Run specific exercise
 
 # Examples:
 just test leap         # Python/OCaml/Clojure/Raku
-just test hello-world  # Rust/Go/Haskell/Zig/Kotlin/Crystal/Elixir/Nim/Raku/Dart/Idris
+just test hello-world  # Rust/Go/Haskell/Zig/Kotlin/Crystal/Elixir/Nim/Raku/Dart/Idris/Unison
 just test knapsack     # Racket
 ```
 
@@ -138,6 +139,7 @@ just test knapsack     # Racket
 - **Crystal**: `cd <project> && crystal spec`
 - **Dart**: `cd <project> && dart pub get && dart test`
 - **Idris**: `cd <project> && pack test <project>`
+- **Unison**: `cd <project> && ucm` (then `load *.test.u` in UCM)
 
 ---
 
@@ -170,6 +172,27 @@ nix develop
 just test hello-world    # Downloads mars.jar automatically
 # Manual: cd hello-world && java -jar ../mars.jar nc runner.mips impl.mips
 ```
+
+##### Unison (interactive UCM + IDE)
+
+Unison is a **content-addressed language** best used with an IDE plugin:
+
+```bash
+cd unison/hello-world
+nix develop --command ucm
+
+# First time - create project to get standard library:
+scratch/main> project.create exercism
+
+# Now edit .u files in IDE (auto-triggers UCM)
+# After editing implementation, run 'update' in UCM
+# Save test file to run tests (or manually: load hello.test.u)
+```
+
+**Key workflow**:
+- Files in UCM's directory auto-trigger on IDE save
+- Run `update` after editing implementation before testing
+- Other files need manual `load path/to/file.u`
 
 ##### Swift (manual installation)
 
@@ -209,10 +232,11 @@ just test hello-world
 | PHP      | PHP 8.3 + Composer | PHPUnit | - |
 | Dart     | Dart SDK + pub | package:test | Built-in |
 | Idris    | Idris 2 + pack | Built-in | idris2-lsp |
+| Unison   | UCM (Unison Codebase Manager) | Built-in | - |
 
 ## Project Statistics
 
-- **Languages**: 23 (22 Nix-managed + 1 manual)
+- **Languages**: 24 (23 Nix-managed + 1 manual)
 - **Exercises**: 40+ (run `just stats` for breakdown)
 - **Global Commands**: 10 (`just --list` to see all)
 - **Centralized Management**: All languages defined in one place (run `just languages`)

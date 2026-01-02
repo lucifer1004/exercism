@@ -1,0 +1,72 @@
+-- Helper: proper modulo that always returns non-negative result
+clock.mod : Int -> Int -> Int
+clock.mod n m =
+  r = Int.mod n m
+  if r < +0 then r + m else r
+
+-- Helper: pad a number to 2 digits
+clock.pad2 : Int -> Text
+clock.pad2 n =
+  if n < +10 then "0" ++ Int.toText n
+  else Int.toText n
+
+-- Helper: normalize total minutes to (hour, minute) in valid range
+clock.normalize : Int -> Int -> (Int, Int)
+clock.normalize hour minute =
+  totalMinutes = hour * +60 + minute
+  normalizedMinutes = clock.mod totalMinutes (+24 * +60)
+  h = normalizedMinutes / +60
+  m = clock.mod normalizedMinutes +60
+  (h, m)
+
+-- Helper: format (hour, minute) tuple as "HH:MM"
+clock.format : (Int, Int) -> Text
+clock.format hm =
+  (h, m) = hm
+  clock.pad2 h ++ ":" ++ clock.pad2 m
+
+{{
+  Given an hour and minute value represented as positive or negative numbers, return the "clock time" in text form.
+
+  For example:
+  `clock.create +23 +5` should be "23:05"
+
+  Negative arguments should be supported:
+  `clock.create -1 +15` should be "23:15"
+
+  Values over the traditional hour or minute values should roll over:
+  `clock.create +1 +65` should be "02:05"
+}}
+clock.create : Int -> Int -> Text
+clock.create hour minute =
+  clock.format (clock.normalize hour minute)
+
+{{
+  {clock.add} is a function which takes in an hour and minutes representing the initial time, and a third argument representing the number of minutes to add.
+
+  The minutes to add may be values over 60:
+  `clock.add +0 +45 +160` should be "03:25"
+}}
+clock.add : Int -> Int -> Int -> Text
+clock.add hour min additionalMinutes =
+  clock.format (clock.normalize hour (min + additionalMinutes))
+
+{{
+  {clock.subtract} is a function which takes in an hour and minutes representing the initial time, and a third argument representing the number of minutes to subtract
+
+  `clock.subtract +10 +3 +4` should be "09:59"
+}}
+clock.subtract : Int -> Int -> Int -> Text
+clock.subtract hours minutes minutesSubtract =
+  clock.format (clock.normalize hours (minutes - minutesSubtract))
+
+{{
+  {clock.equal} is a function which takes in two hour and minute pairs representing the initial times, returning if the resulting clock values are the same.
+
+  For example, `clock.equal (+25, +0) (+1, 0)` should be `true` because they both represent the same clock value time.
+}}
+clock.equal : (Int, Int) -> (Int, Int) -> Boolean
+clock.equal clock1 clock2 =
+  (h1, m1) = clock1
+  (h2, m2) = clock2
+  clock.normalize h1 m1 === clock.normalize h2 m2

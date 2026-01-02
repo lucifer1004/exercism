@@ -1,0 +1,10 @@
+# Unison codebase artifacts
+.unison/
+.unisonHistory
+
+# Build outputs
+build/
+
+# Nix result symlinks
+result
+result-*

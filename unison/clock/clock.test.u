@@ -1,0 +1,470 @@
+clock.test.ex1 = verify do
+  labeled "Create a new clock with an initial time, on the hour" do
+    expected = "08:00"
+    actual = create +8 +0
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex2 = verify do
+  labeled "Create a new clock with an initial time, past the hour" do
+    expected = "11:09"
+    actual = create +11 +9
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex3 = verify do
+  labeled "Create a new clock with an initial time, midnight is zero hours" do
+    expected = "00:00"
+    actual = create +24 +0
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex4 = verify do
+  labeled "Create a new clock with an initial time, hour rolls over" do
+    expected = "01:00"
+    actual = create +25 +0
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex5 = verify do
+  labeled "Create a new clock with an initial time, hour rolls over continuously" do
+    expected = "04:00"
+    actual = create +100 +0
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex6 = verify do
+  labeled "Create a new clock with an initial time, sixty minutes is next hour" do
+    expected = "02:00"
+    actual = create +1 +60
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex7 = verify do
+  labeled "Create a new clock with an initial time, minutes roll over" do
+    expected = "02:40"
+    actual = create +0 +160
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex8 = verify do
+  labeled "Create a new clock with an initial time, minutes roll over continuously" do
+    expected = "04:43"
+    actual = create +0 +1723
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex9 = verify do
+  labeled "Create a new clock with an initial time, hour and minutes roll over" do
+    expected = "03:40"
+    actual = create +25 +160
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex10 = verify do
+  labeled "Create a new clock with an initial time, hour and minutes roll over continuously" do
+    expected = "11:01"
+    actual = create +201 +3001
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex11 = verify do
+  labeled "Create a new clock with an initial time, hour and minutes roll over to exactly midnight" do
+    expected = "00:00"
+    actual = create +72 +8640
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex12 = verify do
+  labeled "Create a new clock with an initial time, negative hour" do
+    expected = "23:15"
+    actual = create -1 +15
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex13 = verify do
+  labeled "Create a new clock with an initial time, negative hour rolls over" do
+    expected = "23:00"
+    actual = create -25 +0
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex14 = verify do
+  labeled "Create a new clock with an initial time, negative hour rolls over continuously" do
+    expected = "05:00"
+    actual = create -91 +0
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex15 = verify do
+  labeled "Create a new clock with an initial time, negative minutes" do
+    expected = "00:20"
+    actual = create +1 -40
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex16 = verify do
+  labeled "Create a new clock with an initial time, negative minutes roll over" do
+    expected = "22:20"
+    actual = create +1 -160
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex17 = verify do
+  labeled "Create a new clock with an initial time, negative minutes roll over continuously" do
+    expected = "16:40"
+    actual = create +1 -4820
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex18 = verify do
+  labeled "Create a new clock with an initial time, negative sixty minutes is previous hour" do
+    expected = "01:00"
+    actual = create +2 -60
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex19 = verify do
+  labeled "Create a new clock with an initial time, negative hour and minutes both roll over" do
+    expected = "20:20"
+    actual = create -25 -160
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex20 = verify do
+  labeled "Create a new clock with an initial time, negative hour and minutes both roll over continuously" do
+    expected = "22:10"
+    actual = create -121 -5810
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex21 = verify do
+  labeled "Add minutes, add minutes" do
+    expected = "10:03"
+    actual = add +10 +0 +3
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex22 = verify do
+  labeled "Add minutes, add no minutes" do
+    expected = "06:41"
+    actual = add +6 +41 +0
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex23 = verify do
+  labeled "Add minutes, add to next hour" do
+    expected = "01:25"
+    actual = add +0 +45 +40
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex24 = verify do
+  labeled "Add minutes, add more than one hour" do
+    expected = "11:01"
+    actual = add +10 +0 +61
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex25 = verify do
+  labeled "Add minutes, add more than two hours with carry" do
+    expected = "03:25"
+    actual = add +0 +45 +160
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex26 = verify do
+  labeled "Add minutes, add across midnight" do
+    expected = "00:01"
+    actual = add +23 +59 +2
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex27 = verify do
+  labeled "Add minutes, add more than one day (1500 min = 25 hrs)" do
+    expected = "06:32"
+    actual = add +5 +32 +1500
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex28 = verify do
+  labeled "Add minutes, add more than two days" do
+    expected = "11:21"
+    actual = add +1 +1 +3500
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex29 = verify do
+  labeled "Subtract minutes, subtract minutes" do
+    expected = "10:00"
+    actual = subtract +10 +3 +3
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex30 = verify do
+  labeled "Subtract minutes, subtract to previous hour" do
+    expected = "09:33"
+    actual = subtract +10 +3 +30
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex31 = verify do
+  labeled "Subtract minutes, subtract more than an hour" do
+    expected = "08:53"
+    actual = subtract +10 +3 +70
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex32 = verify do
+  labeled "Subtract minutes, subtract across midnight" do
+    expected = "23:59"
+    actual = subtract +0 +3 +4
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex33 = verify do
+  labeled "Subtract minutes, subtract more than two hours" do
+    expected = "21:20"
+    actual = subtract +0 +0 +160
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex34 = verify do
+  labeled "Subtract minutes, subtract more than two hours with borrow" do
+    expected = "03:35"
+    actual = subtract +6 +15 +160
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex35 = verify do
+  labeled "Subtract minutes, subtract more than one day (1500 min = 25 hrs)" do
+    expected = "04:32"
+    actual = subtract +5 +32 +1500
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex36 = verify do
+  labeled "Subtract minutes, subtract more than two days" do
+    expected = "00:20"
+    actual = subtract +2 +20 +3000
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex37 = verify do
+  labeled "Compare two clocks for equality, clocks with same time" do
+    expected = true
+    actual = equal (+15, +37) (+15, +37)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex38 = verify do
+  labeled "Compare two clocks for equality, clocks a minute apart" do
+    expected = false
+    actual = equal (+15, +36) (+15, +37)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex39 = verify do
+  labeled "Compare two clocks for equality, clocks an hour apart" do
+    expected = false
+    actual = equal (+14, +37) (+15, +37)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex40 = verify do
+  labeled "Compare two clocks for equality, clocks with hour overflow" do
+    expected = true
+    actual = equal (+10, +37) (+34, +37)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex41 = verify do
+  labeled "Compare two clocks for equality, clocks with hour overflow by several days" do
+    expected = true
+    actual = equal (+3, +11) (+99, +11)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex42 = verify do
+  labeled "Compare two clocks for equality, clocks with negative hour" do
+    expected = true
+    actual = equal (+22, +40) (-2, +40)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex43 = verify do
+  labeled "Compare two clocks for equality, clocks with negative hour that wraps" do
+    expected = true
+    actual = equal (+17, +3) (-31, +3)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex44 = verify do
+  labeled "Compare two clocks for equality, clocks with negative hour that wraps multiple times" do
+    expected = true
+    actual = equal (+13, +49) (-83, +49)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex45 = verify do
+  labeled "Compare two clocks for equality, clocks with minute overflow" do
+    expected = true
+    actual = equal (+0, +1) (+0, +1441)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex46 = verify do
+  labeled "Compare two clocks for equality, clocks with minute overflow by several days" do
+    expected = true
+    actual = equal (+2, +2) (+2, +4322)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex47 = verify do
+  labeled "Compare two clocks for equality, clocks with negative minute" do
+    expected = true
+    actual = equal (+2, +40) (+3, -20)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex48 = verify do
+  labeled "Compare two clocks for equality, clocks with negative minute that wraps" do
+    expected = true
+    actual = equal (+4, +10) (+5, -1490)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex49 = verify do
+  labeled "Compare two clocks for equality, clocks with negative minute that wraps multiple times" do
+    expected = true
+    actual = equal (+6, +15) (+6, -4305)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex50 = verify do
+  labeled "Compare two clocks for equality, clocks with negative hours and minutes" do
+    expected = true
+    actual = equal (+7, +32) (-12, -268)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex51 = verify do
+  labeled "Compare two clocks for equality, clocks with negative hours and minutes that wrap" do
+    expected = true
+    actual = equal (+18, +7) (-54, -11513)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+clock.test.ex52 = verify do
+  labeled "Compare two clocks for equality, full clock and zeroed clock" do
+    expected = true
+    actual = equal (+24, +0) (+0, +0)
+    label "expected" expected
+    label "actual" actual
+    ensureEqual expected actual
+
+test> clock.tests = join [
+  clock.test.ex1,
+  clock.test.ex2,
+  clock.test.ex3,
+  clock.test.ex4,
+  clock.test.ex5,
+  clock.test.ex6,
+  clock.test.ex7,
+  clock.test.ex8,
+  clock.test.ex9,
+  clock.test.ex10,
+  clock.test.ex11,
+  clock.test.ex12,
+  clock.test.ex13,
+  clock.test.ex14,
+  clock.test.ex15,
+  clock.test.ex16,
+  clock.test.ex17,
+  clock.test.ex18,
+  clock.test.ex19,
+  clock.test.ex20,
+  clock.test.ex21,
+  clock.test.ex22,
+  clock.test.ex23,
+  clock.test.ex24,
+  clock.test.ex25,
+  clock.test.ex26,
+  clock.test.ex27,
+  clock.test.ex28,
+  clock.test.ex29,
+  clock.test.ex30,
+  clock.test.ex31,
+  clock.test.ex32,
+  clock.test.ex33,
+  clock.test.ex34,
+  clock.test.ex35,
+  clock.test.ex36,
+  clock.test.ex37,
+  clock.test.ex38,
+  clock.test.ex39,
+  clock.test.ex40,
+  clock.test.ex41,
+  clock.test.ex42,
+  clock.test.ex43,
+  clock.test.ex44,
+  clock.test.ex45,
+  clock.test.ex46,
+  clock.test.ex47,
+  clock.test.ex48,
+  clock.test.ex49,
+  clock.test.ex50,
+  clock.test.ex51,
+  clock.test.ex52
+]

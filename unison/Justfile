@@ -1,0 +1,53 @@
+setup:
+    @nix develop --command echo "Unison environment ready"
+    @echo ""
+    @echo "⚠️  First-time setup:"
+    @echo "  1. cd <project> (e.g., cd hello-world)"
+    @echo "  2. Run: nix develop --command ucm"
+    @echo "  3. In UCM, create a project to get standard library:"
+    @echo "     scratch/main> project.create exercism"
+    @echo ""
+    @echo "💡 Best used with Unison IDE plugin (VS Code, etc.)"
+    @echo "   - Files in direct directory auto-trigger UCM on save"
+    @echo "   - After editing, run 'update' before testing"
+    @echo "   - Test files in direct directory auto-run on save"
+    @echo "   - Other files need manual 'load path/to/file.u'"
+
+clean:
+    @find . -type d -name ".unison" -exec rm -rf {} + 2>/dev/null || true
+    @find . -type f -name ".unisonHistory" -delete 2>/dev/null || true
+
+format:
+    @echo "No standard formatter for Unison"
+
+# Interactive workflow (Unison requires UCM + IDE)
+test project:
+    #!/usr/bin/env bash
+    set -e
+    echo "Testing {{project}}..."
+    echo ""
+    echo "Unison uses an interactive IDE + UCM workflow:"
+    echo ""
+    echo "  1. cd {{project}}"
+    echo "  2. nix develop --command ucm"
+    echo "  3. First time: project.create exercism"
+    echo "  4. Edit .u files in IDE (auto-triggers UCM)"
+    echo "  5. Run 'update' in UCM after editing implementation"
+    echo "  6. Save test file (auto-runs if in direct directory)"
+    echo "     Or manually: load <name>.test.u"
+    echo ""
+    echo "Checking UCM availability..."
+    nix develop --command sh -c "ucm version"
+
+test-all:
+    #!/usr/bin/env bash
+    set -e
+    echo "Unison requires interactive UCM session."
+    echo "Run 'just test <project>' for instructions."
+    echo ""
+    echo "Available projects:"
+    for dir in */; do
+        if [ -f "$dir"*.u ] 2>/dev/null || ls "$dir"*.u >/dev/null 2>&1; then
+            echo "  - ${dir%/}"
+        fi
+    done

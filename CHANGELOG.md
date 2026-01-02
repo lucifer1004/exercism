@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Unison**: Added Unison environment (content-addressed functional programming language)
+  - Toolchain: UCM (Unison Codebase Manager) 1.0.1
+  - Testing: Built-in via `.test.u` files loaded in UCM
+  - Note: Unison uses interactive UCM for testing
+  - 1 exercise: hello-world
 - **Idris**: Added Idris 2 environment (dependent type functional programming language)
   - Standard toolchain: idris2 compiler
   - Testing: Built-in compilation and type checking

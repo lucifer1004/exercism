@@ -2,7 +2,7 @@
     "name": "exercism/hello-world",
     "description": "Exercism hello-world exercise for PHP",
     "require-dev": {
-        "phpunit/phpunit": "^11.5"
+        "phpunit/phpunit": "^12.0"
     },
     "autoload": {
         "files": ["HelloWorld.php"]
